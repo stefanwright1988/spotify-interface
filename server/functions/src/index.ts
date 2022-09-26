@@ -3,6 +3,7 @@ import * as express from "express";
 import * as cors from "cors";
 import * as bodyParser from "body-parser";
 import SpotifyWebApi = require("spotify-web-api-node");
+import * as lyricsFinder from "lyrics-finder";
 
 const app = express();
 app.use(cors());
@@ -27,12 +28,9 @@ app.post("/refresh", (req, res) => {
         accessToken: data.body.access_token,
         expiresIn: data.body.expires_in,
       });
-      // Save the access token so that it's used in future calls
-      //spotifyApi.setAccessToken(data.body["access_token"]);
     })
     .catch((err) => {
       console.log("Could not refresh access token", err);
-
       res.status(400).send(err.message);
     });
 });
@@ -62,7 +60,6 @@ app.post("/login", (req, res) => {
 });
 
 app.get("/search", (req: any, res) => {
-  console.log(req);
   const accessToken = req.query.accessToken;
   const searchTerm = req.query.searchTerm;
 
@@ -80,6 +77,16 @@ app.get("/search", (req: any, res) => {
     .catch((err) => {
       console.log(err);
     });
+});
+
+app.get("/lyricsLookup", async (req: any, res) => {
+  const trackTitle = req.query.trackTitle;
+  const trackArtist = req.query.trackArtist;
+
+  const trackLyrics =
+    (await lyricsFinder(trackArtist, trackTitle)) || "No Lyrics Found";
+
+  res.json({ trackLyrics });
 });
 
 export const webApi = functions.https.onRequest(app);
