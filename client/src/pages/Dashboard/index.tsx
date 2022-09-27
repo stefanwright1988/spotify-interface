@@ -5,17 +5,21 @@ import axios from "axios";
 import { useDebounce } from "../../hooks/useDebounce";
 import TrackSearchResult from "../../components/TrackSearchResult";
 import Player from "../../components/Player";
+import ArtistSearchResult from "../../components/ArtistSearchResult";
 
 const Dashboard = ({ code }) => {
   const accessToken = useAuth(code);
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState({
+    tracks: [],
+    artists: [],
+  });
   const [selectedSong, setSelectedSong] = useState();
   const [lyrics, setLyrics] = useState("");
 
   useDebounce(
     () => {
-      if (!searchTerm) return setSearchResults([]);
+      if (!searchTerm) return setSearchResults({ tracks: [], artists: [] });
       if (!accessToken) return;
       axios
         .get(
@@ -28,18 +32,30 @@ const Dashboard = ({ code }) => {
           }
         )
         .then((res) => {
-          const map = res.data.body.tracks.items.map((track) => {
+          console.log(res.data);
+          const tracksMap = res.data.tracks.map((track) => {
             return {
               artist: track.artists[0].name,
               title: track.name,
               uri: track.uri,
-              album_uri: track.album.images.reduce((smallest, image) => {
+              image_uri: track.album.images.reduce((smallest, image) => {
                 if (image.height < smallest.height) return image;
                 return smallest;
               }, track.album.images[0]),
             };
           });
-          setSearchResults(map);
+          const artistsMap = res.data.artists.map((artist) => {
+            return {
+              name: artist.name,
+              id: artist.id,
+              image_uri: artist.images.reduce((smallest, image) => {
+                if (image.height < smallest.height) return image;
+                return smallest;
+              }, artist.images[0]),
+            };
+          });
+          const fullMap = { tracks: tracksMap, artists: artistsMap };
+          setSearchResults(fullMap);
         });
     },
     [searchTerm, accessToken],
@@ -48,7 +64,7 @@ const Dashboard = ({ code }) => {
 
   const chooseTrack = (track) => {
     setSelectedSong(track);
-    setSearchResults([]);
+    setSearchResults({ tracks: [], artists: [] });
     setSearchTerm("");
     setLyrics("");
   };
@@ -81,15 +97,28 @@ const Dashboard = ({ code }) => {
         }}
       />
       <div className="flex-grow-1 my-2" style={{ overflowY: "auto" }}>
-        {searchResults.map((track) => (
-          <TrackSearchResult
-            track={track}
-            key={track.uri}
-            chooseTrack={chooseTrack}
-          />
-        ))}
-        {searchResults.length === 0 && selectedSong && (
-          <div className="text-center">{lyrics}</div>
+        {searchResults.tracks.length &&
+          searchResults.tracks.map((track) => (
+            <TrackSearchResult
+              track={track}
+              key={track.uri}
+              chooseTrack={chooseTrack}
+            />
+          ))}
+        {searchResults.artists.length &&
+          searchResults.artists.map((artist) => (
+            <ArtistSearchResult
+              artist={artist}
+              key={artist.id}
+              chooseTrack={chooseTrack}
+            />
+          ))}
+        {searchResults.tracks?.length === 0 && selectedSong && (
+          <div className="text-center">
+            {lyrics.split(/\r?\n/).map((line) => {
+              return <p>{line}</p>;
+            })}
+          </div>
         )}
       </div>
       <div>

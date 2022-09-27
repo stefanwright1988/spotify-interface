@@ -11,7 +11,7 @@ const TrackSearchResult = ({ track, chooseTrack }) => {
       onClick={handlePlay}
     >
       <img
-        src={track.album_uri.url}
+        src={track.image_uri.url}
         style={{ height: "64px", width: "64px" }}
       />
       <div className="ml-3">

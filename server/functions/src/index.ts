@@ -71,12 +71,22 @@ app.get("/search", (req: any, res) => {
   console.log(`accessToken is: ${accessToken}`);
   spotifyApi.setAccessToken(accessToken);
 
-  spotifyApi
-    .searchTracks(searchTerm)
-    .then((response) => res.status(200).send(response))
-    .catch((err) => {
-      console.log(err);
-    });
+  let retVal = { tracks: [], artists: [] };
+
+  Promise.all([
+    spotifyApi
+      .searchTracks(searchTerm)
+      .then((response) => (retVal.tracks = response.body.tracks.items))
+      .catch((err) => {
+        console.log(err);
+      }),
+    spotifyApi
+      .searchArtists(searchTerm)
+      .then((response) => (retVal.artists = response.body.artists.items))
+      .catch((err) => {
+        console.log(err);
+      }),
+  ]).then(() => res.status(200).send(retVal));
 });
 
 app.get("/lyricsLookup", async (req: any, res) => {
@@ -85,7 +95,7 @@ app.get("/lyricsLookup", async (req: any, res) => {
 
   const trackLyrics =
     (await lyricsFinder(trackArtist, trackTitle)) || "No Lyrics Found";
-
+  console.log(trackLyrics);
   res.json({ trackLyrics });
 });
 
