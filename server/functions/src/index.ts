@@ -37,6 +37,7 @@ app.post("/refresh", (req, res) => {
 
 app.post("/login", (req, res) => {
   const authResCode = req.body.code;
+  console.log(`authResCode is: ${authResCode}`);
 
   const spotifyApi = new SpotifyWebApi({
     redirectUri: "http://127.0.0.1:5173",
@@ -97,6 +98,23 @@ app.get("/lyricsLookup", async (req: any, res) => {
     (await lyricsFinder(trackArtist, trackTitle)) || "No Lyrics Found";
   console.log(trackLyrics);
   res.json({ trackLyrics });
+});
+
+app.get("/getPlaylists", (req: any, res) => {
+  const accessToken = req.query.accessToken;
+  console.log(`accessToken is: ${accessToken}`);
+
+  const spotifyApi = new SpotifyWebApi({
+    redirectUri: "http://127.0.0.1:5173",
+    clientId: "8b82677d1fa148f4994da55224a4d540",
+    clientSecret: "03809aa8f5a24d09befd136ba4be0ce3",
+  });
+
+  spotifyApi.setAccessToken(accessToken);
+
+  spotifyApi.getUserPlaylists("1163907351").then((playlistData) => {
+    res.status(200).send(playlistData);
+  });
 });
 
 export const webApi = functions.https.onRequest(app);

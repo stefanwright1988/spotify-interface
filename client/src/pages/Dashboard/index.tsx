@@ -6,6 +6,8 @@ import { useDebounce } from "../../hooks/useDebounce";
 import TrackSearchResult from "../../components/TrackSearchResult";
 import Player from "../../components/Player";
 import ArtistSearchResult from "../../components/ArtistSearchResult";
+import Playlists from "../../components/Playlists";
+import Nav from "../../components/Nav";
 
 const Dashboard = ({ code }) => {
   const accessToken = useAuth(code);
@@ -16,6 +18,7 @@ const Dashboard = ({ code }) => {
   });
   const [selectedSong, setSelectedSong] = useState();
   const [lyrics, setLyrics] = useState("");
+  const [playlists, setPlaylists] = useState([]);
 
   useDebounce(
     () => {
@@ -86,45 +89,78 @@ const Dashboard = ({ code }) => {
       });
   }, [selectedSong]);
 
+  useEffect(() => {
+    if (!accessToken) return;
+    axios
+      .get(
+        "http://localhost:5001/spotify-react-ts-vite/us-central1/webApi/getPlaylists",
+        {
+          params: {
+            accessToken,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        const playlistMap = res.data.body.items.map((playlist) => {
+          return {
+            name: playlist.name,
+            id: playlist.id,
+            image_uri: playlist.images.reduce((smallest, image) => {
+              if (image.height < smallest.height) return image;
+              return smallest;
+            }, playlist.images[0]),
+          };
+        });
+        setPlaylists(playlistMap);
+      })
+      .catch((err) => {
+        if (err.code !== "ERR_CANCELED") console.log(err);
+      });
+  }, [accessToken]);
+
   return (
-    <Container className="d-flex flex-column py-2" style={{ height: "100vh" }}>
-      <Form.Control
-        type="search"
-        placeholder="Search Songs/Artist"
-        value={searchTerm}
-        onChange={(e) => {
-          setSearchTerm(e.target.value);
-        }}
-      />
-      <div className="flex-grow-1 my-2" style={{ overflowY: "auto" }}>
-        {searchResults.tracks.length &&
-          searchResults.tracks.map((track) => (
-            <TrackSearchResult
-              track={track}
-              key={track.uri}
-              chooseTrack={chooseTrack}
-            />
-          ))}
-        {searchResults.artists.length &&
-          searchResults.artists.map((artist) => (
-            <ArtistSearchResult
-              artist={artist}
-              key={artist.id}
-              chooseTrack={chooseTrack}
-            />
-          ))}
-        {searchResults.tracks?.length === 0 && selectedSong && (
-          <div className="text-center">
-            {lyrics.split(/\r?\n/).map((line) => {
-              return <p>{line}</p>;
-            })}
+    <>
+      <Nav>
+        <Form.Control
+          type="search"
+          placeholder="Search Songs/Artist"
+          value={searchTerm}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+          }}
+        />
+      </Nav>
+      <div className="row flex-grow-1">
+        <Playlists playlists={playlists} />
+        <Container className="row col-11 d-flex flex-column py-2">
+          <div className="flex-grow-1 my-2" style={{ overflowY: "auto" }}>
+            {searchResults.tracks.length > 0 &&
+              searchResults.tracks.map((track) => (
+                <TrackSearchResult
+                  track={track}
+                  key={track.uri}
+                  chooseTrack={chooseTrack}
+                />
+              ))}
+            {searchResults.artists.length > 0 &&
+              searchResults.artists.map((artist) => (
+                <ArtistSearchResult artist={artist} key={artist.id} />
+              ))}
+            {searchResults.tracks?.length === 0 && selectedSong && (
+              <div className="text-center">
+                {lyrics.split(/\r?\n/).map((line, index) => {
+                  return <p key={`line-${index}`}>{line}</p>;
+                })}
+              </div>
+            )}
           </div>
-        )}
+        </Container>
       </div>
-      <div>
+      <div className="row">
         <Player accessToken={accessToken} trackUri={selectedSong?.uri} />
       </div>
-    </Container>
+    </>
   );
 };
 

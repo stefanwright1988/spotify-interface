@@ -7,7 +7,7 @@ const ArtistSearchResult = ({ artist }) => {
       style={{ cursor: "pointer" }}
     >
       <img
-        src={artist.imge_uri.url}
+        src={artist.image_uri.url}
         style={{ height: "64px", width: "64px" }}
       />
       <div className="ml-3">
