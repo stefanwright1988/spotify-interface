@@ -24,7 +24,7 @@ const useAuth = (code: string) => {
           setAccessToken(res.data.accessToken);
           setRefreshToken(res.data.refreshToken);
           setExpiresIn(res.data.expiresIn);
-          window.history.pushState({}, "", "/");
+          window.history.pushState({}, "", "/dashboard");
         })
         .catch((err) => {
           if (err.code !== "ERR_CANCELED") console.log(err);
@@ -49,11 +49,11 @@ const useAuth = (code: string) => {
         .then((res) => {
           setAccessToken(res.data.accessToken);
           setExpiresIn(res.data.expiresIn);
-          window.history.pushState({}, "", "/");
+          window.history.pushState({}, "", "/dashboard");
         })
         .catch((err) => {
           console.log(err);
-          window.location.href = "/";
+          window.location.href = "/dashboard";
         });
     }, (expiresIn - 60) * 1000);
 

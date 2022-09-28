@@ -13,7 +13,7 @@ app.post("/refresh", (req, res) => {
   const refreshToken = req.body.refreshToken;
 
   const spotifyApi = new SpotifyWebApi({
-    redirectUri: "http://127.0.0.1:5173",
+    redirectUri: "http://127.0.0.1:5173/dashboard",
     clientId: "8b82677d1fa148f4994da55224a4d540",
     clientSecret: "03809aa8f5a24d09befd136ba4be0ce3",
     refreshToken: refreshToken,
@@ -40,7 +40,7 @@ app.post("/login", (req, res) => {
   console.log(`authResCode is: ${authResCode}`);
 
   const spotifyApi = new SpotifyWebApi({
-    redirectUri: "http://127.0.0.1:5173",
+    redirectUri: "http://127.0.0.1:5173/dashboard",
     clientId: "8b82677d1fa148f4994da55224a4d540",
     clientSecret: "03809aa8f5a24d09befd136ba4be0ce3",
   });
@@ -65,7 +65,7 @@ app.get("/search", (req: any, res) => {
   const searchTerm = req.query.searchTerm;
 
   const spotifyApi = new SpotifyWebApi({
-    redirectUri: "http://127.0.0.1:5173",
+    redirectUri: "http://127.0.0.1:5173/dashboard",
     clientId: "8b82677d1fa148f4994da55224a4d540",
     clientSecret: "03809aa8f5a24d09befd136ba4be0ce3",
   });
@@ -105,14 +105,14 @@ app.get("/getPlaylists", (req: any, res) => {
   console.log(`accessToken is: ${accessToken}`);
 
   const spotifyApi = new SpotifyWebApi({
-    redirectUri: "http://127.0.0.1:5173",
+    redirectUri: "http://127.0.0.1:5173/dashboard",
     clientId: "8b82677d1fa148f4994da55224a4d540",
     clientSecret: "03809aa8f5a24d09befd136ba4be0ce3",
   });
 
   spotifyApi.setAccessToken(accessToken);
 
-  spotifyApi.getUserPlaylists("1163907351").then((playlistData) => {
+  spotifyApi.getUserPlaylists().then((playlistData) => {
     res.status(200).send(playlistData);
   });
 });
