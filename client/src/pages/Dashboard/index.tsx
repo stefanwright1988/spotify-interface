@@ -8,10 +8,10 @@ import Player from "../../components/Player";
 import ArtistSearchResult from "../../components/ArtistSearchResult";
 import Playlists from "../../components/Playlists";
 import Nav from "../../components/Nav";
-import Sidebar from "../../components/Sidebar";
 import { Outlet } from "react-router-dom";
 
 const Dashboard = ({ code }) => {
+  const accessToken = code;
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState({
     tracks: [],
@@ -19,17 +19,18 @@ const Dashboard = ({ code }) => {
   });
   const [selectedSong, setSelectedSong] = useState();
   const [lyrics, setLyrics] = useState("");
+  const [playlists, setPlaylists] = useState([]);
 
   useDebounce(
     () => {
       if (!searchTerm) return setSearchResults({ tracks: [], artists: [] });
-      if (!code) return;
+      if (!accessToken) return;
       axios
         .get(
           "http://localhost:5001/spotify-react-ts-vite/us-central1/webApi/search",
           {
             params: {
-              code,
+              accessToken,
               searchTerm,
             },
           }
@@ -61,7 +62,7 @@ const Dashboard = ({ code }) => {
           setSearchResults(fullMap);
         });
     },
-    [searchTerm, code],
+    [searchTerm, accessToken],
     500
   );
 
@@ -89,6 +90,36 @@ const Dashboard = ({ code }) => {
       });
   }, [selectedSong]);
 
+  useEffect(() => {
+    if (!accessToken) return;
+    axios
+      .get(
+        "http://localhost:5001/spotify-react-ts-vite/us-central1/webApi/getPlaylists",
+        {
+          params: {
+            accessToken,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        const playlistMap = res.data.body.items.map((playlist) => {
+          return {
+            name: playlist.name,
+            id: playlist.id,
+            image_uri: playlist.images.reduce((smallest, image) => {
+              if (image.height < smallest.height) return image;
+              return smallest;
+            }, playlist.images[0]),
+          };
+        });
+        setPlaylists(playlistMap);
+      })
+      .catch((err) => {
+        if (err.code !== "ERR_CANCELED") console.log(err);
+      });
+  }, [accessToken]);
+
   return (
     <>
       <Nav>
@@ -102,7 +133,8 @@ const Dashboard = ({ code }) => {
         />
       </Nav>
       <div className="row flex-grow-1">
-        <Container className="row col-10 d-flex flex-column py-2">
+        <Container className="row col-11 d-flex flex-column py-2">
+          <Outlet />
           <div className="flex-grow-1 my-2" style={{ overflowY: "auto" }}>
             {searchResults.tracks.length > 0 &&
               searchResults.tracks.map((track) => (
@@ -124,11 +156,10 @@ const Dashboard = ({ code }) => {
               </div>
             )}
           </div>
-          <Outlet />
-          <div className="row">
-            <Player accessToken={code} trackUri={selectedSong?.uri} />
-          </div>
         </Container>
+      </div>
+      <div className="row">
+        <Player accessToken={accessToken} trackUri={selectedSong?.uri} />
       </div>
     </>
   );
