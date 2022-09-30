@@ -1,26 +1,41 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import "./App.css";
-
-import { BrowserRouter, Routes, Route, Link, Outlet } from "react-router-dom";
-import { Default, Home, Playlists } from "./pages";
-import { ThemeProvider } from "@mui/material/styles";
-import { theme } from "./theme";
+import { useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+  Dashboard,
+  Albums,
+  Album,
+  Artist,
+  Artists,
+  Playlist,
+  Playlists,
+  Search,
+  Me,
+  Default,
+} from "./pages";
+import "./app.css";
+import { Sidebar } from "./components";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const activeMenu = true;
 
   return (
-    <ThemeProvider theme={theme}>
+    <main className="flex h-full">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Default />}>
-            <Route index element={<Home />} />
+            <Route index element={<Dashboard />} />
+            <Route path="search" element={<Search />} />
             <Route path="playlists" element={<Playlists />} />
+            <Route path="playlist" element={<Playlist />} />
+            <Route path="artists" element={<Artists />} />
+            <Route path="artist" element={<Artist />} />
+            <Route path="albums" element={<Albums />} />
+            <Route path="album" element={<Album />} />
+            <Route path="me" element={<Me />} />
           </Route>
         </Routes>
       </BrowserRouter>
-    </ThemeProvider>
+    </main>
   );
 }
 
