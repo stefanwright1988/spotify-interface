@@ -6,8 +6,8 @@ const appSlice = createSlice({
     navActive: true,
   },
   reducers: {
-    toggleNav: (state, action) => {
-      state.navActive = action.payload;
+    toggleNav: (state) => {
+      state.navActive = !state.navActive;
     },
   },
 });
