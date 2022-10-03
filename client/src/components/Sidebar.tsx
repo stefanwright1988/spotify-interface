@@ -1,12 +1,12 @@
 import { Link, NavLink } from "react-router-dom";
-import appSlice from "../redux/slices";
+import appSlice from "../redux/slices/app";
 import { useDispatch, useSelector } from "react-redux";
 //import icons....
 
 const Sidebar = () => {
   const { toggleNav } = appSlice.actions;
   const dispatch = useDispatch();
-  const { navActive } = useSelector((state:any) => state.app);
+  const { navActive } = useSelector((state: any) => state.app);
 
   const activeLink = `flex items-center gap-2 pl-4 pt-4 pb-2.5 rounded-lg text-white text-md m-2`;
 
