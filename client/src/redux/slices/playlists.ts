@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const fetchAllPlaylists = createAsyncThunk(
   "fetch-all-playlists",
-  async (apiUrl) => {
+  async (apiUrl: string) => {
     const response = await fetch(apiUrl);
     return response.json();
   }

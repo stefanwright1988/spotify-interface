@@ -16,10 +16,11 @@ const Default = () => {
           <Sidebar />
         </div>
       ) : (
-        <div className="w-0">
+        <div className="w-10">
           <Sidebar />
         </div>
       )}
+
       <div
         className={`dark:bg-main-bg bg-main-bg min-h-screen w-full
             ${navActive ? `md:ml-72` : `flex-2`}`}

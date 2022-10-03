@@ -9,6 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.2.0",
+    "@fortawesome/free-solid-svg-icons": "^6.2.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "@iconscout/unicons": "^4.0.1",
     "@reduxjs/toolkit": "^1.8.5",
     "react": "^18.2.0",
     "react-burger-icons": "^1.1.5",
