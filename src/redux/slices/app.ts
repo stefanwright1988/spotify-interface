@@ -7,7 +7,7 @@ const appSlice = createSlice({
     screenWidth: 0,
     spotify_access_code: "",
     spotify_refresh_code: "",
-    spotify_token_expiresIn: 3600,
+    spotify_token_expiresAt: 3600,
   },
   reducers: {
     setNavActive: (state, action: PayloadAction<boolean>) => {
@@ -22,8 +22,8 @@ const appSlice = createSlice({
     setSpotifyRefreshCode: (state, action: PayloadAction<string>) => {
       state.spotify_refresh_code = action.payload;
     },
-    setSpotifyExpiresIn: (state, action: PayloadAction<number>) => {
-      state.spotify_token_expiresIn = action.payload;
+    setSpotifyExpiresAt: (state, action: PayloadAction<number>) => {
+      state.spotify_token_expiresAt = action.payload;
     },
   },
 });

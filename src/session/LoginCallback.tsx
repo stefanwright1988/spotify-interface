@@ -10,7 +10,7 @@ const LoginCallback = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [searchParams] = useSearchParams();
   const accessCode = searchParams.get("code");
-  const { setSpotifyAccessCode, setSpotifyRefreshCode, setSpotifyExpiresIn } =
+  const { setSpotifyAccessCode, setSpotifyRefreshCode, setSpotifyExpiresAt } =
     appSlice.actions;
 
   useEffect(() => {
@@ -25,7 +25,9 @@ const LoginCallback = () => {
         .then((res) => {
           dispatch(setSpotifyAccessCode(res.data.access_token));
           dispatch(setSpotifyRefreshCode(res.data.refresh_token));
-          dispatch(setSpotifyExpiresIn(res.data.expires_in));
+          dispatch(
+            setSpotifyExpiresAt(Date.now() + res.data.expires_in * 1000 - 10000)
+          );
           window.history.pushState({}, "", "/");
         })
         .catch((err) => {
