@@ -87,4 +87,30 @@ app.get("/callback", (req: any, res) => {
     });
 });
 
+app.get("/refresh_token", (req: any, res) => {
+  const { refreshToken } = req.query;
+
+  axios({
+    method: "post",
+    url: "https://accounts.spotify.com/api/token",
+    data: querystring.stringify({
+      grant_type: "refresh_token",
+      refresh_token: refreshToken,
+    }),
+    headers: {
+      "content-type": "application/x-www-form-urlencoded",
+      Authorization: `Basic ${Buffer.from(
+        `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`,
+        "utf-8"
+      ).toString("base64")}`,
+    },
+  })
+    .then((response) => {
+      res.send(response.data);
+    })
+    .catch((error) => {
+      res.send(error);
+    });
+});
+
 exports.app = functions.https.onRequest(app);
