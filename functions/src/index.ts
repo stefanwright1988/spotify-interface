@@ -40,6 +40,7 @@ app.get("/login", (req, res) => {
 
 app.get("/callback", (req: any, res) => {
   const code = req.query.code || null;
+  let retVal = {};
 
   axios({
     method: "post",
@@ -51,24 +52,39 @@ app.get("/callback", (req: any, res) => {
     }),
     headers: {
       "content-type": "application/x-www-form-urlencoded",
-      // eslint-disable-next-line prettier/prettier
       Authorization: `Basic ${Buffer.from(
         `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`,
         "utf-8"
       ).toString("base64")}`,
     },
   })
-    .then((response) => {
-      console.log(response);
-      if (response.status === 200) {
-        res.send(response.data);
+    .then((tokenResponse) => {
+      if (tokenResponse.status === 200) {
+        retVal = { ...retVal, ...tokenResponse.data };
       } else {
-        res.send(response);
+        retVal = { ...retVal, ...tokenResponse };
       }
     })
     .catch((error) => {
-      console.log(error);
-      res.send(error);
+      if (error.response) {
+        // Request made and server responded
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        retVal = { ...error.response.data, status: error.response.status };
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.log(error.request);
+        retVal = { error: error.request };
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+        retVal = { error: error.message };
+      }
+    })
+    .finally(() => {
+      res.send(retVal);
     });
 });
+
 exports.app = functions.https.onRequest(app);

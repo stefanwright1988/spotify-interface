@@ -14,17 +14,13 @@ const LoginCallback = () => {
     appSlice.actions;
 
   useEffect(() => {
+    const controller: AbortController = new AbortController();
+    const signal: AbortSignal = controller.signal;
     const performLogin = async () => {
-      const controller: AbortController = new AbortController();
-      const signal: AbortSignal = controller.signal;
-
-      const params = {
-        code: accessCode,
-        devMode: "development",
-      };
       await axios
         .get(
-          `http://localhost:5001/spotify-react-ts-vite/us-central1/app/callback?code=${accessCode}`
+          `http://localhost:5001/spotify-react-ts-vite/us-central1/app/callback?code=${accessCode}`,
+          { signal: signal }
         )
         .then((res) => {
           dispatch(setSpotifyAccessCode(res.data.access_token));
@@ -33,10 +29,14 @@ const LoginCallback = () => {
           window.history.pushState({}, "", "/");
         })
         .catch((err) => {
-          if (err.code !== "ERR_CANCELED") console.log(err);
+          if (controller.signal.aborted) return;
+          console.log(err);
         });
     };
     performLogin();
+    return () => {
+      controller.abort();
+    };
   }, [accessCode]);
 
   return (
