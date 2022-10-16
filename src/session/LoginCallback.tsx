@@ -4,14 +4,14 @@ import React, { useEffect, useState } from "react";
 import axios, { AxiosRequestConfig } from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../redux/store";
-import appSlice from "../redux/slices/app";
+import spotifySlice from "../redux/slices/spotify";
 
 const LoginCallback = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [searchParams] = useSearchParams();
   const accessCode = searchParams.get("code");
   const { setSpotifyAccessCode, setSpotifyRefreshCode, setSpotifyExpiresAt } =
-    appSlice.actions;
+    spotifySlice.actions;
 
   useEffect(() => {
     const controller: AbortController = new AbortController();

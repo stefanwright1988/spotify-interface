@@ -42,22 +42,20 @@ app.get("/callback", (req: any, res) => {
   const code = req.query.code || null;
   let retVal = {};
 
-  axios({
-    method: "post",
-    url: "https://accounts.spotify.com/api/token",
-    data: querystring.stringify({
-      grant_type: "authorization_code",
-      code: code,
-      redirect_uri: process.env.SPOTIFY_REDIRECT_URI,
-    }),
-    headers: {
-      "content-type": "application/x-www-form-urlencoded",
-      Authorization: `Basic ${Buffer.from(
-        `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`,
-        "utf-8"
-      ).toString("base64")}`,
-    },
-  })
+  const headers = {
+    "content-type": "application/x-www-form-urlencoded",
+    Authorization: `Basic ${Buffer.from(
+      `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`,
+      "utf-8"
+    ).toString("base64")}`,
+  };
+  const data = querystring.stringify({
+    grant_type: "authorization_code",
+    code: code,
+    redirect_uri: process.env.SPOTIFY_REDIRECT_URI,
+  });
+  axios
+    .post("https://accounts.spotify.com/api/token", data, { headers })
     .then((tokenResponse) => {
       if (tokenResponse.status === 200) {
         retVal = { ...retVal, ...tokenResponse.data };
@@ -90,21 +88,41 @@ app.get("/callback", (req: any, res) => {
 app.get("/refresh_token", (req: any, res) => {
   const { refreshToken } = req.query;
 
-  axios({
-    method: "post",
-    url: "https://accounts.spotify.com/api/token",
-    data: querystring.stringify({
-      grant_type: "refresh_token",
-      refresh_token: refreshToken,
-    }),
-    headers: {
-      "content-type": "application/x-www-form-urlencoded",
-      Authorization: `Basic ${Buffer.from(
-        `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`,
-        "utf-8"
-      ).toString("base64")}`,
-    },
-  })
+  axios
+    .post(
+      "https://accounts.spotify.com/api/token",
+      querystring.stringify({
+        grant_type: "refresh_token",
+        refresh_token: refreshToken,
+      }),
+      {
+        headers: {
+          "content-type": "application/x-www-form-urlencoded",
+          Authorization: `Basic ${Buffer.from(
+            `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`,
+            "utf-8"
+          ).toString("base64")}`,
+        },
+      }
+    )
+    .then((response) => {
+      res.send(response.data);
+    })
+    .catch((error) => {
+      res.send(error);
+      console.log(error);
+    });
+});
+
+app.get("/playlists", (req: any, res) => {
+  const { accessToken } = req.query;
+
+  axios
+    .get("https://api.spotify.com/v1/me/playlists", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
     .then((response) => {
       res.send(response.data);
     })

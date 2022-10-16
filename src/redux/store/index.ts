@@ -1,12 +1,26 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import appSlice from "../slices/app";
 import playlistsSlice from "../slices/playlists";
+import spotifySlice from "../slices/spotify";
+import thunk from "redux-thunk";
+import storage from "redux-persist/lib/storage";
+import { persistReducer } from "redux-persist";
+
+const spotifyPersistConfig = {
+  key: "spotifyState",
+  storage,
+  whitelist: ["spotify_refresh_code"],
+};
+
+const reducers = combineReducers({
+  app: appSlice.reducer,
+  playlists: playlistsSlice.reducer,
+  spotify: persistReducer(spotifyPersistConfig, spotifySlice.reducer),
+});
 
 const store = configureStore({
-  reducer: {
-    app: appSlice.reducer,
-    playlists: playlistsSlice.reducer,
-  },
+  reducer: reducers,
+  middleware: [thunk],
 });
 
 export default store;

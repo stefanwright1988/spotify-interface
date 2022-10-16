@@ -17,22 +17,16 @@ import { useDispatch, useSelector } from "react-redux";
 import appSlice from "./redux/slices/app";
 import LoginCallback from "./session/LoginCallback";
 import axios from "axios";
+import spotifySlice from "./redux/slices/spotify";
 function App() {
   //Redux
   const dispatch = useDispatch();
-  const {
-    setScreenWidth,
-    setNavActive,
-    setSpotifyAccessCode,
-    setSpotifyExpiresAt,
-  } = appSlice.actions;
-  const {
-    screenWidth,
-    navActive,
-    spotify_access_code,
-    spotify_refresh_code,
-    spotify_token_expiresAt,
-  } = useSelector((state: any) => state.app);
+  const { setScreenWidth, setNavActive } = appSlice.actions;
+  const { setSpotifyAccessCode, setSpotifyExpiresAt, setSpotifyRefreshCode } =
+    spotifySlice.actions;
+  const { screenWidth, navActive } = useSelector((state: any) => state.app);
+  const { spotify_access_code, spotify_refresh_code, spotify_token_expiresAt } =
+    useSelector((state: any) => state.spotify);
   useEffect(() => {
     const handleResize = () => {
       dispatch(setScreenWidth(window.innerWidth));
@@ -54,6 +48,37 @@ function App() {
       dispatch(setNavActive(true));
     }
   }, [screenWidth]);
+
+  useEffect(() => {
+    if (spotify_refresh_code) {
+      const controller: AbortController = new AbortController();
+      const signal: AbortSignal = controller.signal;
+      const performLogin = async () => {
+        await axios
+          .get(
+            `http://localhost:5001/spotify-react-ts-vite/us-central1/app/refresh_token?refreshToken=${spotify_refresh_code}`,
+            { signal: signal }
+          )
+          .then((res) => {
+            dispatch(setSpotifyAccessCode(res.data.access_token));
+            dispatch(
+              setSpotifyExpiresAt(
+                Date.now() + res.data.expires_in * 1000 - 10000
+              )
+            );
+            window.history.pushState({}, "", "/");
+          })
+          .catch((err) => {
+            if (controller.signal.aborted) return;
+            console.log(err);
+          });
+      };
+      performLogin();
+      return () => {
+        controller.abort();
+      };
+    }
+  }, []);
 
   useEffect(() => {
     if (spotify_access_code) {

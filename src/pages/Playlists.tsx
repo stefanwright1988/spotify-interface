@@ -4,13 +4,22 @@ import { useEffect } from "react";
 import store, { AppDispatch } from "../redux/store";
 
 const Playlists = () => {
-  const state = useSelector((state: any) => state.playlists);
+  const playlistState = useSelector((state: any) => state.playlists);
+  const { spotify_access_code } = useSelector((state: any) => state.spotify);
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
+    const abortCtrl = new AbortController();
+    const opts = { signal: abortCtrl.signal };
     store.dispatch(
-      fetchAllPlaylists("https://jsonplaceholder.typicode.com/posts/1")
+      fetchAllPlaylists({
+        apiUrl: `http://localhost:5001/spotify-react-ts-vite/us-central1/app/playlists?accessToken=${spotify_access_code}`,
+        opts: opts,
+      })
     );
+    return () => {
+      abortCtrl.abort();
+    };
   }, [dispatch]);
 
   return (

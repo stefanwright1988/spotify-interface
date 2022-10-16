@@ -14,7 +14,7 @@ export const links = [
         icon: <FiSearch />,
       },
       {
-        name: "Your Library",
+        name: "playlists",
         icon: <FiBookOpen />,
       },
     ],
