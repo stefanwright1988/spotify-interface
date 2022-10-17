@@ -13,20 +13,22 @@ import {
   Default,
 } from "./pages";
 import "./app.css";
-import { useDispatch, useSelector } from "react-redux";
-import appSlice from "./redux/slices/app";
+import { useSelector } from "react-redux";
+import appSlice from "./redux/slices/globalApp";
 import LoginCallback from "./session/LoginCallback";
 import axios from "axios";
-import spotifySlice from "./redux/slices/spotify";
+import spotifySlice from "./redux/slices/spotifyAuth";
+import { useAppDispatch, useAppSelector } from "./hooks/reduxHooks";
+
 function App() {
   //Redux
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { setScreenWidth, setNavActive } = appSlice.actions;
   const { setSpotifyAccessCode, setSpotifyExpiresAt, setSpotifyRefreshCode } =
     spotifySlice.actions;
-  const { screenWidth, navActive } = useSelector((state: any) => state.app);
+  const { screenWidth, navActive } = useAppSelector((state: any) => state.app);
   const { spotify_access_code, spotify_refresh_code, spotify_token_expiresAt } =
-    useSelector((state: any) => state.spotify);
+    useAppSelector((state: any) => state.spotify);
   useEffect(() => {
     const handleResize = () => {
       dispatch(setScreenWidth(window.innerWidth));

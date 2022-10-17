@@ -1,10 +1,11 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import appSlice from "../slices/app";
-import playlistsSlice from "../slices/playlists";
-import spotifySlice from "../slices/spotify";
-import thunk from "redux-thunk";
+import appSlice from "../slices/globalApp";
+import playlistsSlice from "../slices/spotifyPlaylists";
+import spotifySlice from "../slices/spotifyAuth";
+import thunkMiddleware from "redux-thunk";
 import storage from "redux-persist/lib/storage";
 import { persistReducer } from "redux-persist";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 const spotifyPersistConfig = {
   key: "spotifyState",
@@ -20,7 +21,6 @@ const reducers = combineReducers({
 
 const store = configureStore({
   reducer: reducers,
-  middleware: [thunk],
 });
 
 export default store;

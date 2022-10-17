@@ -114,7 +114,7 @@ app.get("/refresh_token", (req: any, res) => {
     });
 });
 
-app.get("/playlists", (req: any, res) => {
+app.get("/playlists", async (req: any, res) => {
   const { accessToken } = req.query;
 
   axios

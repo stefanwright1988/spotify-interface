@@ -1,17 +1,18 @@
-import { fetchAllPlaylists } from "../redux/slices/playlists";
-import { useDispatch, useSelector } from "react-redux";
+import { fetchAllPlaylists } from "../redux/slices/spotifyPlaylists";
+import { useSelector } from "react-redux";
 import { useEffect } from "react";
-import store, { AppDispatch } from "../redux/store";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
+import { PlaylistAttributes } from "../types/playlistTypes";
 
 const Playlists = () => {
-  const playlistState = useSelector((state: any) => state.playlists);
-  const { spotify_access_code } = useSelector((state: any) => state.spotify);
-  const dispatch = useDispatch<AppDispatch>();
+  const playlistState = useAppSelector((state: any) => state.playlists);
+  const { spotify_access_code } = useAppSelector((state: any) => state.spotify);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const abortCtrl = new AbortController();
     const opts = { signal: abortCtrl.signal };
-    store.dispatch(
+    dispatch(
       fetchAllPlaylists({
         apiUrl: `http://localhost:5001/spotify-react-ts-vite/us-central1/app/playlists?accessToken=${spotify_access_code}`,
         opts: opts,
@@ -21,6 +22,22 @@ const Playlists = () => {
       abortCtrl.abort();
     };
   }, [dispatch]);
+
+  if (playlistState.fetchState === "loading") {
+    return (
+      <div>
+        <p>...LOADING PLAYLISTS</p>
+      </div>
+    );
+  }
+
+  if (playlistState.fetchState === "error") {
+    return (
+      <div>
+        <p>...ERROR LOADING PLAYLISTS</p>
+      </div>
+    );
+  }
 
   return (
     <div className="h-full bg-slate-300">
@@ -34,32 +51,29 @@ const Playlists = () => {
                   Two
                 </div>
               </div>
-              {[
-                { name: 1, comment: 2 },
-                { name: 1, comment: 2 },
-                { name: 1, comment: 2 },
-                { name: 1, comment: 2 },
-                { name: 1, comment: 2 },
-              ].map((playlist, index) => {
-                const oddRowclassName =
-                    "bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6",
-                  evenRowClassName =
-                    "bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6";
-                return (
-                  <div
-                    className={
-                      index % 2 === 0 ? evenRowClassName : oddRowclassName
-                    }
-                  >
-                    <div className="text-sm font-medium text-gray-500">
-                      {playlist.name}
+              {playlistState.data.items?.map(
+                (playlist: PlaylistAttributes, index: number) => {
+                  const oddRowclassName =
+                      "bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6",
+                    evenRowClassName =
+                      "bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6";
+                  return (
+                    <div
+                      className={
+                        index % 2 === 0 ? evenRowClassName : oddRowclassName
+                      }
+                      key={index}
+                    >
+                      <div className="text-sm font-medium text-gray-500">
+                        {playlist.name}
+                      </div>
+                      <div className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                        {playlist.description}
+                      </div>
                     </div>
-                    <div className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                      {playlist.comment}
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                }
+              )}
             </dl>
           </div>
         </div>

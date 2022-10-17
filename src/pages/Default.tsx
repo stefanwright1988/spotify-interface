@@ -2,9 +2,10 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 import { Navbar, Sidebar } from "../components";
+import { useAppSelector } from "../hooks/reduxHooks";
 
 const Default = () => {
-  const { navActive } = useSelector((state: any) => state.app);
+  const { navActive } = useAppSelector((state: any) => state.app);
 
   return (
     <>

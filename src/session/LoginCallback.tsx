@@ -1,13 +1,12 @@
 import { FaSpinner } from "react-icons/fa";
 import { useSearchParams } from "react-router-dom";
-import React, { useEffect, useState } from "react";
-import axios, { AxiosRequestConfig } from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "../redux/store";
-import spotifySlice from "../redux/slices/spotify";
+import { useEffect } from "react";
+import axios from "axios";
+import spotifySlice from "../redux/slices/spotifyAuth";
+import { useAppDispatch } from "../hooks/reduxHooks";
 
 const LoginCallback = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const [searchParams] = useSearchParams();
   const accessCode = searchParams.get("code");
   const { setSpotifyAccessCode, setSpotifyRefreshCode, setSpotifyExpiresAt } =

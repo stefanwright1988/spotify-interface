@@ -1,14 +1,15 @@
 import { Link, NavLink } from "react-router-dom";
-import appSlice from "../redux/slices/app";
-import { useDispatch, useSelector } from "react-redux";
+import appSlice from "../redux/slices/globalApp";
+import { useSelector } from "react-redux";
 import { links } from "../maps/sidebar";
 import { NavButton } from "./buttons/NavButton";
+import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 //import icons....
 
 const Sidebar = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { setNavActive } = appSlice.actions;
-  const { navActive, screenWidth } = useSelector((state: any) => state.app);
+  const { navActive, screenWidth } = useAppSelector((state: any) => state.app);
 
   const handleCloseSidebar = () => {
     if (navActive && screenWidth <= 900) {

@@ -1,8 +1,8 @@
 import { BurgerSexy } from "react-burger-icons";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../hooks/reduxHooks";
 
 export const NavButton = ({ title, buttonFunc, color }: any) => {
-  const { navActive } = useSelector((state: any) => state.app);
+  const { navActive } = useAppSelector((state: any) => state.app);
   return (
     <button
       type="button"
