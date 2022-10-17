@@ -40,41 +40,40 @@ const Playlists = () => {
   }
 
   return (
-    <div className="h-full bg-slate-300">
+    <div className="h-full">
       <div className="pt-14 flex justify-center">
-        <div className="bg-secondary-dark-bg rounded-xl w-11/12 p-8 pt-9 m-3 flex justify-center">
-          <div className="border-t border-gray-200 w-full">
-            <dl>
-              <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <div className="text-sm font-medium text-gray-500">One</div>
-                <div className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                  Two
-                </div>
+        <div className="rounded-xl w-full p-8 pt-9 m-3 flex justify-center overflow-hidden">
+          <div className=" w-full">
+            <div className="flex justify-center">
+              <div className="grid grid-cols-[repeat(auto-fit,_minmax(160px,_1fr))] gap-6 w-full">
+                {playlistState.data.items?.map(
+                  (playlist: PlaylistAttributes, index: number) => {
+                    return (
+                      <div
+                        key={index}
+                        className="flex text-white text-2xl flex-col justify-end bg-zinc-800 p-3 rounded-xl w-full overflow-hidden"
+                      >
+                        <div className="shadow-lg">
+                          <img
+                            className="w-full aspect-square "
+                            src={playlist.images[0]?.url}
+                          />
+                        </div>
+                        <div className="w-full h-16">
+                          <p className=" text-14 font-bold truncate">
+                            {playlist.name}
+                          </p>
+                          <p className="text-14 line-clamp-2 leading-4">
+                            {playlist.description ||
+                              `By ${playlist.owner.display_name}`}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  }
+                )}
               </div>
-              {playlistState.data.items?.map(
-                (playlist: PlaylistAttributes, index: number) => {
-                  const oddRowclassName =
-                      "bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6",
-                    evenRowClassName =
-                      "bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6";
-                  return (
-                    <div
-                      className={
-                        index % 2 === 0 ? evenRowClassName : oddRowclassName
-                      }
-                      key={index}
-                    >
-                      <div className="text-sm font-medium text-gray-500">
-                        {playlist.name}
-                      </div>
-                      <div className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
-                        {playlist.description}
-                      </div>
-                    </div>
-                  );
-                }
-              )}
-            </dl>
+            </div>
           </div>
         </div>
       </div>

@@ -26,6 +26,7 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@iconscout/unicons": "^4.0.1",
     "@reduxjs/toolkit": "^1.8.5",
+    "@tailwindcss/line-clamp": "^0.4.2",
     "axios": "^1.1.2",
     "react": "^18.2.0",
     "react-burger-icons": "^1.1.5",

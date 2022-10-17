@@ -14,7 +14,7 @@ export interface PlaylistAttributes {
   followers: { href: string; total: number };
   href: string;
   id: string;
-  images: { url: string; height: string; width: string };
+  images: [{ url: string; height: string; width: string }];
   name: string;
   owner: {
     external_urls: {
