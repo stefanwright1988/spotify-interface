@@ -114,11 +114,28 @@ app.get("/refresh_token", (req: any, res) => {
     });
 });
 
-app.get("/playlists", async (req: any, res) => {
+app.get("/allPlaylists", async (req: any, res) => {
   const { accessToken } = req.query;
 
   axios
     .get("https://api.spotify.com/v1/me/playlists", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+    .then((response) => {
+      res.send(response.data);
+    })
+    .catch((error) => {
+      res.send(error);
+    });
+});
+
+app.get("/playlist", async (req: any, res) => {
+  const { accessToken, playlistId } = req.query;
+
+  axios
+    .get(`https://api.spotify.com/v1/playlists/${playlistId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

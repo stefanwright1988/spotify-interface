@@ -14,7 +14,7 @@ const Playlists = () => {
     const opts = { signal: abortCtrl.signal };
     dispatch(
       fetchAllPlaylists({
-        apiUrl: `http://localhost:5001/spotify-react-ts-vite/us-central1/app/playlists?accessToken=${spotify_access_code}`,
+        apiUrl: `http://localhost:5001/spotify-react-ts-vite/us-central1/app/allPlaylists?accessToken=${spotify_access_code}`,
         opts: opts,
       })
     );
@@ -46,7 +46,7 @@ const Playlists = () => {
           <div className=" w-full">
             <div className="flex justify-center">
               <div className="grid grid-cols-[repeat(auto-fit,_minmax(160px,_1fr))] gap-6 w-full">
-                {playlistState.data.items?.map(
+                {playlistState.playlists.items?.map(
                   (playlist: PlaylistAttributes, index: number) => {
                     return (
                       <div
@@ -58,6 +58,7 @@ const Playlists = () => {
                             className="w-full aspect-square "
                             src={playlist.images[0]?.url}
                           />
+                          <a href={`/playlist/${playlist.id}`}>Play</a>
                         </div>
                         <div className="w-full h-16">
                           <p className=" text-14 font-bold truncate">

@@ -135,7 +135,7 @@ function App() {
             <Route index element={<Dashboard />} />
             <Route path="search" element={<Search />} />
             <Route path="playlists" element={<Playlists />} />
-            <Route path="playlist" element={<Playlist />} />
+            <Route path="playlist/:playlistId" element={<Playlist />} />
             <Route path="artists" element={<Artists />} />
             <Route path="artist" element={<Artist />} />
             <Route path="albums" element={<Albums />} />
