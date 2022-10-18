@@ -27,30 +27,36 @@ export const fetchPlaylist = createAsyncThunk<
 
 const playlistsSlice = createSlice({
   name: "playlists",
-  initialState: { playlists: {}, selectedPlaylist: {}, fetchState: "idle" },
+  initialState: {
+    playlists: {},
+    playlistsFetchState: "idle",
+    selectedPlaylist: {},
+    selectedPlaylistFetchState: "idle",
+  },
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchAllPlaylists.fulfilled, (state, { payload }) => {
-        (state.playlists = payload), (state.fetchState = "fulfilled");
+        (state.playlists = payload), (state.playlistsFetchState = "fulfilled");
       })
       .addCase(fetchAllPlaylists.pending, (state, action) => {
-        state.fetchState = "loading";
+        state.playlistsFetchState = "loading";
       })
       .addCase(fetchAllPlaylists.rejected, (state, { error }) => {
         if (error.name !== "AbortError") {
-          state.fetchState = "error";
+          state.playlistsFetchState = "error";
         }
       })
       .addCase(fetchPlaylist.fulfilled, (state, { payload }) => {
-        (state.selectedPlaylist = payload), (state.fetchState = "fulfilled");
+        (state.selectedPlaylist = payload),
+          (state.selectedPlaylistFetchState = "fulfilled");
       })
       .addCase(fetchPlaylist.pending, (state, action) => {
-        state.fetchState = "loading";
+        state.selectedPlaylistFetchState = "loading";
       })
       .addCase(fetchPlaylist.rejected, (state, { error }) => {
         if (error.name !== "AbortError") {
-          state.fetchState = "error";
+          state.selectedPlaylistFetchState = "error";
         }
       });
   },

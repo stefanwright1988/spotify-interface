@@ -68,7 +68,6 @@ function App() {
                 Date.now() + res.data.expires_in * 1000 - 10000
               )
             );
-            window.history.pushState({}, "", "/");
           })
           .catch((err) => {
             if (controller.signal.aborted) return;

@@ -3,9 +3,10 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 import { PlaylistAttributes } from "../types/playlistTypes";
+import { Link } from "react-router-dom";
 
 const Playlists = () => {
-  const playlistState = useAppSelector((state: any) => state.playlists);
+  const playlistsFetchState = useAppSelector((state: any) => state.playlists);
   const { spotify_access_code } = useAppSelector((state: any) => state.spotify);
   const dispatch = useAppDispatch();
 
@@ -23,7 +24,7 @@ const Playlists = () => {
     };
   }, [dispatch]);
 
-  if (playlistState.fetchState === "loading") {
+  if (playlistsFetchState.fetchState === "loading") {
     return (
       <div>
         <p>...LOADING PLAYLISTS</p>
@@ -31,7 +32,7 @@ const Playlists = () => {
     );
   }
 
-  if (playlistState.fetchState === "error") {
+  if (playlistsFetchState.fetchState === "error") {
     return (
       <div>
         <p>...ERROR LOADING PLAYLISTS</p>
@@ -46,7 +47,7 @@ const Playlists = () => {
           <div className=" w-full">
             <div className="flex justify-center">
               <div className="grid grid-cols-[repeat(auto-fit,_minmax(160px,_1fr))] gap-6 w-full">
-                {playlistState.playlists.items?.map(
+                {playlistsFetchState.playlists.items?.map(
                   (playlist: PlaylistAttributes, index: number) => {
                     return (
                       <div
@@ -58,7 +59,7 @@ const Playlists = () => {
                             className="w-full aspect-square "
                             src={playlist.images[0]?.url}
                           />
-                          <a href={`/playlist/${playlist.id}`}>Play</a>
+                          <Link to={`/playlist/${playlist.id}`}>Play</Link>
                         </div>
                         <div className="w-full h-16">
                           <p className=" text-14 font-bold truncate">
