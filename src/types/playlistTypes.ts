@@ -32,15 +32,17 @@ export interface PlaylistAttributes {
   };
   public: boolean;
   snapshot_id: string;
-  tracks: {
-    href: string;
-    items: [{}];
-    limit: number;
-    next: string;
-    offset: number;
-    previous: string;
-    total: number;
-  };
+  tracks: [
+    {
+      href: string;
+      items: [{}];
+      limit: number;
+      next: string;
+      offset: number;
+      previous: string;
+      total: number;
+    }
+  ];
   type: string;
   uri: string;
 }

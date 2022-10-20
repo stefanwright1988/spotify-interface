@@ -34,7 +34,6 @@ app.get("/login", (req, res) => {
     state: state,
     scope: scope,
   });
-  console.log("go for redirect?");
   res.redirect(`https://accounts.spotify.com/authorize?${queryParams}`);
 });
 
@@ -133,19 +132,62 @@ app.get("/allPlaylists", async (req: any, res) => {
 
 app.get("/playlist", async (req: any, res) => {
   const { accessToken, playlistId } = req.query;
+  try {
+    const songs = await getAllPlaylistSongs(accessToken, playlistId);
+    res.send(songs);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500);
+  }
+});
 
-  axios
-    .get(`https://api.spotify.com/v1/playlists/${playlistId}`, {
+const getSongsByBatch = async (playlistId, accessToken, batch, limit) => {
+  return axios.get(
+    `https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=${limit}&offset=${
+      batch * limit
+    }`,
+    {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
-    })
-    .then((response) => {
-      res.send(response.data);
-    })
-    .catch((error) => {
-      res.send(error);
-    });
-});
+    }
+  );
+};
+
+const getAllPlaylistSongs = async (accessToken, playlistId) => {
+  let retVal: any = {};
+  const retPromises = [];
+  let retSongs = [];
+  const listqueryLimit = 50;
+
+  const getPlaylist = await axios.get(
+    `https://api.spotify.com/v1/playlists/${playlistId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+  const { data } = getPlaylist;
+  retVal = { ...data };
+
+  const trackCount = data.tracks.total;
+  const batchCount = Math.ceil(trackCount / listqueryLimit);
+  for (let batchNumber = 0; batchNumber < batchCount; batchNumber++) {
+    const fetchSongs = getSongsByBatch(
+      playlistId,
+      accessToken,
+      batchNumber,
+      listqueryLimit
+    );
+    retPromises.push(fetchSongs);
+  }
+  const rawSongs: any = await Promise.all(retPromises);
+  for (let i = 0; i < rawSongs.length; i++) {
+    retSongs = retSongs.concat(rawSongs[i].data.items);
+  }
+  retVal.tracks.items = retSongs;
+  return retVal;
+};
 
 exports.app = functions.https.onRequest(app);
