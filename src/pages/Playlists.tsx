@@ -2,7 +2,7 @@ import { fetchAllPlaylists } from "../redux/slices/spotifyPlaylists";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
-import { PlaylistAttributes } from "../types/playlistTypes";
+import { IPlaylist } from "../types/playlistTypes";
 import { Link } from "react-router-dom";
 
 const Playlists = () => {
@@ -48,7 +48,7 @@ const Playlists = () => {
             <div className="flex justify-center">
               <div className="grid grid-cols-[repeat(auto-fit,_minmax(160px,_1fr))] gap-6 w-full">
                 {playlistsFetchState.playlists.items?.map(
-                  (playlist: PlaylistAttributes, index: number) => {
+                  (playlist: IPlaylist, index: number) => {
                     return (
                       <div
                         key={index}

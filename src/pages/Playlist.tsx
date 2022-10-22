@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { convertMsToTime } from "../helpers/datetime";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 import { fetchPlaylist } from "../redux/slices/spotifyPlaylists";
-import { PlaylistAttributes } from "../types/playlistTypes";
+import { IPlaylist } from "../types/playlistTypes";
 
 const Playlist = () => {
   const params = useParams();
@@ -11,7 +11,7 @@ const Playlist = () => {
     selectedPlaylist,
     selectedPlaylistFetchState,
   }: {
-    selectedPlaylist: PlaylistAttributes;
+    selectedPlaylist: IPlaylist;
     selectedPlaylistFetchState: string;
   } = useAppSelector((state: any) => state.playlists);
   const { spotify_access_code } = useAppSelector((state: any) => state.spotify);

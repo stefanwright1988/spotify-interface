@@ -24,7 +24,7 @@ const Default = () => {
 
       <div
         className={`dark:bg-zinc-900 bg-main-bg min-h-screen w-full flex flex-col
-            ${navActive ? `md:ml-72` : `ml-16`}`}
+            ${navActive ? `ml-72` : `ml-16`}`}
       >
         <div className="fixed md:static w-full h-10 z-10">
           <Navbar />

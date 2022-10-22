@@ -1,28 +1,25 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import {
-  PlaylistAttributes,
-  PlaylistListAttributes,
-} from "../../types/playlistTypes";
+import { IPlaylist, IAllPlaylists } from "../../types/playlistTypes";
 import { RootState } from "../store";
 
 export const fetchAllPlaylists = createAsyncThunk<
-  PlaylistListAttributes,
+  IAllPlaylists,
   { apiUrl: string; opts: {} },
   { state: RootState }
 >("fetch-all-playlists", async (args: { apiUrl: string; opts: {} }) => {
   const { apiUrl, opts } = args;
   const response: any = await fetch(apiUrl, opts);
-  return (await response.json()) as PlaylistListAttributes;
+  return (await response.json()) as IAllPlaylists;
 });
 
 export const fetchPlaylist = createAsyncThunk<
-  PlaylistAttributes,
+  IPlaylist,
   { apiUrl: string; opts: {} },
   { state: RootState }
 >("fetch-playlist", async (args: { apiUrl: string; opts: {} }) => {
   const { apiUrl, opts } = args;
   const response: any = await fetch(apiUrl, opts);
-  return (await response.json()) as PlaylistAttributes;
+  return (await response.json()) as IPlaylist;
 });
 
 const playlistsSlice = createSlice({
