@@ -6,15 +6,18 @@ export const links = [
     title: "Menu",
     links: [
       {
-        name: "Home",
+        name: "home",
+        link: "/",
         icon: <FiHome />,
       },
       {
         name: "Search",
+        link: "/search",
         icon: <FiSearch />,
       },
       {
         name: "playlists",
+        link: "/playlists",
         icon: <FiBookOpen />,
       },
     ],

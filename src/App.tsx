@@ -106,7 +106,7 @@ function App() {
 
   if (!spotify_access_code || spotify_access_code === "") {
     return (
-      <main className="flex h-full">
+      <div className="flex h-full">
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Default />}>
@@ -122,29 +122,27 @@ function App() {
             </Route>
           </Routes>
         </BrowserRouter>
-      </main>
+      </div>
     );
   }
   //We are logged in!
   return (
-    <main className="flex h-full">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Default />}>
-            <Route index element={<Dashboard />} />
-            <Route path="search" element={<Search />} />
-            <Route path="playlists" element={<Playlists />} />
-            <Route path="playlist/:playlistId" element={<Playlist />} />
-            <Route path="artists" element={<Artists />} />
-            <Route path="artist" element={<Artist />} />
-            <Route path="albums" element={<Albums />} />
-            <Route path="album" element={<Album />} />
-            <Route path="me" element={<Me />} />
-            <Route path="loginCallback" element={<Navigate replace to="/" />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </main>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Default />}>
+          <Route index element={<Dashboard />} />
+          <Route path="search" element={<Search />} />
+          <Route path="playlists" element={<Playlists />} />
+          <Route path="playlist/:playlistId" element={<Playlist />} />
+          <Route path="artists" element={<Artists />} />
+          <Route path="artist" element={<Artist />} />
+          <Route path="albums" element={<Albums />} />
+          <Route path="album" element={<Album />} />
+          <Route path="me" element={<Me />} />
+          <Route path="loginCallback" element={<Navigate replace to="/" />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
+import { FaRegClock } from "react-icons/fa";
 import { useParams } from "react-router-dom";
-import { convertMsToTime } from "../helpers/datetime";
+import { convertMsToTime, formatUTCDateToISO } from "../helpers/datetime";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 import { fetchPlaylist } from "../redux/slices/spotifyPlaylists";
 import { IPlaylist } from "../types/playlistTypes";
@@ -85,13 +86,13 @@ const Playlist = () => {
 
       <div className="w-full min-h-[calc(66.66%_-_3.5rem)] bg-slate-200 flex flex-col">
         <div className="w-full h-14 bg-slate-400">controls</div>
-        <div className="w-full bg-slate-600 flex-1">
-          <table className="min-w-full">
+        <div className="w-full bg-slate-600 flex flex-col">
+          <table className="box-border table-fixed w-11/12 m-auto">
             <thead className="border-b">
               <tr>
                 <th
                   scope="col"
-                  className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                  className="text-sm font-medium text-gray-900 px-6 py-4 text-left w-1/12"
                 >
                   #
                 </th>
@@ -99,34 +100,41 @@ const Playlist = () => {
                   scope="col"
                   className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
                 >
-                  First
+                  Title
                 </th>
                 <th
                   scope="col"
-                  className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                  className="text-sm font-medium text-gray-900 px-6 py-4 text-left hidden md:table-cell"
                 >
-                  Last
+                  Album
                 </th>
                 <th
                   scope="col"
-                  className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                  className="text-sm font-medium text-gray-900 px-6 py-4 text-left hidden md:table-cell"
                 >
-                  Handle
+                  Date Added
+                </th>
+                <th
+                  scope="col"
+                  className="text-sm font-medium text-gray-900 px-6 py-4 text-left w-1/12 hidden md:table-cell"
+                >
+                  <FaRegClock />
                 </th>
               </tr>
             </thead>
             <tbody>
               {selectedPlaylist.tracks.items.map((tracks, index) => {
+                const { added_at } = tracks;
                 const { name, album, duration_ms } = tracks.track;
                 const albumThumb = album.images.filter((image) => {
                   return image.height === 64;
                 })[0];
                 return (
                   <tr className="border-b">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">
                       {index + 1}
                     </td>
-                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                    <td className="text-sm text-gray-900 font-light px-6 py-4">
                       <div className="flex flex-row">
                         <div>
                           <img src={albumThumb.url} />
@@ -137,10 +145,13 @@ const Playlist = () => {
                         </div>
                       </div>
                     </td>
-                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                    <td className="text-sm text-gray-900 font-light px-6 py-4 hidden md:table-cell">
                       {album.name}
                     </td>
-                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                    <td className="text-sm text-gray-900 font-light px-6 py-4 hidden md:table-cell">
+                      {formatUTCDateToISO(added_at).toLocaleDateString()}
+                    </td>
+                    <td className="text-sm text-gray-900 font-light px-6 py-4 hidden md:table-cell">
                       {convertMsToTime(Number(duration_ms))}
                     </td>
                   </tr>

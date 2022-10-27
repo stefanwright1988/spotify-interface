@@ -16,3 +16,8 @@ export const convertMsToTime = (milliseconds: number) => {
 
   return `${hours}h ${padTo2Digits(minutes)}m`;
 };
+
+export const formatUTCDateToISO = (utcDate: string) => {
+  const convertedTimestamp = new Date(utcDate);
+  return convertedTimestamp;
+};

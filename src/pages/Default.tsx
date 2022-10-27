@@ -9,30 +9,26 @@ const Default = () => {
 
   return (
     <>
-      <div className="flex relative dark:bg-main-dark-bg">
-        <div className="fixed right-4 bottom-4 z-50">X</div>
-      </div>
-      {navActive ? (
-        <div className="w-72 fixed sidebar dark:bg-black bg-white">
-          <Sidebar />
-        </div>
-      ) : (
-        <div className="w-16 fixed sidebar dark:bg-black bg-white transition-all">
-          <Sidebar />
-        </div>
-      )}
-
-      <div
-        className={`dark:bg-zinc-900 bg-main-bg min-h-screen w-full flex flex-col
-            ${navActive ? `ml-72` : `ml-16`}`}
+      <Navbar />
+      <section
+        id="content"
+        className="flex flex-row flex-wrap flex-grow basis-full flex-shrink max-h-[88vh]"
       >
-        <div className="fixed md:static w-full h-10 z-10">
-          <Navbar />
+        <aside id="content__left" className="flex flex-col w-2/12">
+          <Sidebar />
+        </aside>
+        <div id="content__middle" className="w-10/12">
+          <main className="overflow-y-scroll block max-h-[88vh]">
+            <Outlet />
+          </main>
         </div>
-        <div className="-mt-10 h-full z-0">
-          <Outlet />
-        </div>
-      </div>
+      </section>
+      <section
+        id="current__track"
+        className="bg-blue-400 px-4 py-2 flex flex-row flex-wrap items-center h-[6vh]"
+      >
+        Playback bar
+      </section>
     </>
   );
 };

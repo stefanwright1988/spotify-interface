@@ -1,10 +1,7 @@
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import appSlice from "../redux/slices/globalApp";
-import { useSelector } from "react-redux";
 import { links } from "../maps/sidebar";
-import { NavButton } from "./buttons/NavButton";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
-//import icons....
 
 const Sidebar = () => {
   const dispatch = useAppDispatch();
@@ -17,56 +14,28 @@ const Sidebar = () => {
     }
   };
 
-  const activeLink = navActive
-    ? `flex items-center gap-5 w-full pt-4 pb-2.5 rounded-lg text-white text-md`
-    : `flex justify-center gap-5 pl-2 pt-3 pb-2.5 rounded-lg text-white text-md`;
-  const inactiveLink = navActive
-    ? `flex items-center gap-5 w-full pt-4 pb-2.5 rounded-lg text-gray-700 dark:text-gray-200 text-md dark:hover:text-black hover:bg-light-gray`
-    : `flex justify-center gap-5 w-12 pt-4 pb-2.5 rounded-lg text-gray-700 dark:text-gray-200 text-md dark:hover:text-black hover:bg-light-gray`;
-
   return (
-    <div className="h-screen md:overflow-hidden overflow-auto md:hover:overflow-auto pb-10 mx-2">
-      <div className="flex justify-between items-center">
-        <NavButton
-          title="Hey"
-          buttonFunc={() => dispatch(setNavActive(!navActive))}
-        />
-        {navActive && (
-          <Link
-            to="/"
-            className="items-center gap-3 flex ml-4 mt-2 text-xl font-extrabold tracking-tight dark:text-white text-slate-900"
-            onClick={handleCloseSidebar}
-          >
-            Home
-          </Link>
-        )}
-      </div>
-      <div className="mt-10">
+    <div className="flex flex-grow flex-shrink h-[calc(100%_-_56px)]">
+      <nav className="flex flex-col flex-wrap mb-2 ">
         {links.map((topLink, index) => (
           <div key={index}>
-            <p className="text-gray-400 m-0 ml-0 mt-4 uppercase">
-              {topLink.title}
-            </p>
             {topLink.links.map((subLink, index) => (
               <NavLink
-                to={`/${subLink.name}`}
+                to={`${subLink.link}`}
                 key={index}
-                className={({ isActive }) =>
-                  isActive ? activeLink : inactiveLink
-                }
+                className="flex py-2 flex-nowrap flex-row items-center"
                 onClick={handleCloseSidebar}
               >
-                <div className="flex w-16 h-6 items-center justify-center">
+                <div className="block w-6 h-6 items-center justify-center">
                   {subLink.icon}
                 </div>
-                {navActive && (
-                  <span className="capitalize">{subLink.name}</span>
-                )}
+                <span className="capitalize">{subLink.name}</span>
               </NavLink>
             ))}
           </div>
         ))}
-      </div>
+        <hr />
+      </nav>
     </div>
   );
 };
