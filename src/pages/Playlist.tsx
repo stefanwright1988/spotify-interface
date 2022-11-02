@@ -30,7 +30,7 @@ const Playlist = () => {
     return () => {
       abortCtrl.abort();
     };
-  }, [dispatch]);
+  }, [dispatch, params.playlistId]);
 
   if (
     selectedPlaylistFetchState === "loading" ||
@@ -64,80 +64,95 @@ const Playlist = () => {
 
   return (
     <div className="h-full justify-center flex flex-col">
-      <div className="w-full max-h-[calc(33.33%_+_3.5rem)] bg-slate-50">
-        <div className="pt-14 pb-4 h-full flex flex-row">
+      <div className="w-full">
+        <div className="pt-4 pb-4 flex flex-row">
           <img
-            className="w-1/6 mx-4 aspect-square"
+            className="w-56 mx-8 aspect-square shadow-xl"
             src={selectedPlaylist.images[0]?.url}
           />
-          <div className="w-5/6 mx-4">
-            <span>
-              Playlist type: {selectedPlaylist.public ? "Public" : "Private"}
+          <div className="w-5/6 mx-4 flex flex-col justify-end">
+            <span className="py-2 font-semibold">
+              {selectedPlaylist.public ? "Public Playlist" : "Private Playlist"}
             </span>
-            <h1>{selectedPlaylist.name}</h1>
+            <h1 className="text-3xl py-2">{selectedPlaylist.name}</h1>
             <p>{selectedPlaylist.description}</p>
-            <span>
+            <span className="py-2">
               {selectedPlaylist.followers.total} likes,{" "}
-              {selectedPlaylist.tracks.total} songs, {convertedTotalTrackLength}
+              {selectedPlaylist.tracks.total} songs,{" "}
+              <span className="font-thin">{convertedTotalTrackLength}</span>
             </span>
           </div>
         </div>
       </div>
 
-      <div className="w-full min-h-[calc(66.66%_-_3.5rem)] bg-slate-200 flex flex-col">
-        <div className="w-full h-14 bg-slate-400">controls</div>
-        <div className="w-full bg-slate-600 flex flex-col">
-          <table className="box-border table-fixed w-11/12 m-auto">
-            <thead className="border-b">
-              <tr>
+      <div className="w-full min-h-[calc(66.66%_-_3.5rem)] flex flex-col">
+        <div className="w-full h-14">controls</div>
+        <div className="w-full flex flex-col">
+          <table
+            role="table"
+            className="w-11/12 m-auto grid border-collapse grid-cols-[minmax(15px,_15px)_minmax(150px,_2fr)_minmax(150px,_1fr)_minmax(75px,_75px)] xl:grid-cols-[minmax(15px,_15px)_minmax(150px,_3fr)_minmax(150px,_1fr)_minmax(150px,_1fr)_minmax(150px,_1fr)_minmax(75px,_75px)]"
+          >
+            <thead role="rowgroup" className="contents border-b">
+              <tr role="row" className="contents">
                 <th
-                  scope="col"
-                  className="text-sm font-medium text-gray-900 px-6 py-4 text-left w-1/12"
+                  role="columnheader"
+                  className="text-sm uppercase font-medium px-2 py-4 text-left"
                 >
                   #
                 </th>
                 <th
-                  scope="col"
-                  className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                  role="columnheader"
+                  className="text-sm uppercase font-medium px-6 py-4 text-left"
                 >
                   Title
                 </th>
                 <th
-                  scope="col"
-                  className="text-sm font-medium text-gray-900 px-6 py-4 text-left hidden md:table-cell"
+                  role="columnheader"
+                  className="text-sm uppercase font-medium px-6 py-4 text-left"
                 >
                   Album
                 </th>
                 <th
-                  scope="col"
-                  className="text-sm font-medium text-gray-900 px-6 py-4 text-left hidden md:table-cell"
+                  role="columnheader"
+                  className="text-sm uppercase font-medium px-6 py-4 text-left hidden xl:table-cell"
+                >
+                  Added By
+                </th>
+                <th
+                  role="columnheader"
+                  className="text-sm uppercase font-medium px-6 py-4 text-left hidden xl:table-cell"
                 >
                   Date Added
                 </th>
                 <th
-                  scope="col"
-                  className="text-sm font-medium text-gray-900 px-6 py-4 text-left w-1/12 hidden md:table-cell"
+                  role="columnheader"
+                  className="text-sm uppercase font-medium px-2 py-4"
                 >
-                  <FaRegClock />
+                  <div className=" md:flex flex-row justify-center items-center content-center flex-wrap">
+                    <FaRegClock />
+                  </div>
                 </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody role="rowgroup" className="contents">
               {selectedPlaylist.tracks.items.map((tracks, index) => {
-                const { added_at } = tracks;
+                const { added_at, added_by } = tracks;
                 const { name, album, duration_ms } = tracks.track;
                 const albumThumb = album.images.filter((image) => {
                   return image.height === 64;
                 })[0];
                 return (
-                  <tr className="border-b">
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                  <tr role="row" className="contents border-b">
+                    <td role="cell" className="px-2 py-4 text-sm font-medium ">
                       {index + 1}
                     </td>
-                    <td className="text-sm text-gray-900 font-light px-6 py-4">
+                    <td role="cell" className="text-sm font-light px-6 py-4">
                       <div className="flex flex-row">
                         <div>
-                          <img src={albumThumb.url} />
+                          <img
+                            src={albumThumb?.url}
+                            className="min-w-[48px] aspect-square"
+                          />
                         </div>
                         <div className="flex flex-col">
                           <p>{name}</p>
@@ -145,13 +160,22 @@ const Playlist = () => {
                         </div>
                       </div>
                     </td>
-                    <td className="text-sm text-gray-900 font-light px-6 py-4 hidden md:table-cell">
-                      {album.name}
+                    <td role="cell" className="text-sm font-light px-6 py-4">
+                      <span>{album.name}</span>
                     </td>
-                    <td className="text-sm text-gray-900 font-light px-6 py-4 hidden md:table-cell">
+                    <td
+                      role="cell"
+                      className="text-sm font-light px-6 py-4 hidden xl:table-cell"
+                    >
+                      {added_by.id}
+                    </td>
+                    <td
+                      role="cell"
+                      className="text-sm font-light px-6 py-4 hidden xl:table-cell"
+                    >
                       {formatUTCDateToISO(added_at).toLocaleDateString()}
                     </td>
-                    <td className="text-sm text-gray-900 font-light px-6 py-4 hidden md:table-cell">
+                    <td role="cell" className="text-sm font-light px-2 py-4">
                       {convertMsToTime(Number(duration_ms))}
                     </td>
                   </tr>

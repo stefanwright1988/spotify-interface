@@ -53,7 +53,12 @@ export interface IPlaylistTracks {
 
 export interface ITrackList {
   added_at: string;
-  added_by: {};
+  added_by: {
+    href: string;
+    id: string;
+    type: string;
+    uri: string;
+  };
   is_local: boolean;
   primary_color: string | null;
   track: ITrack;

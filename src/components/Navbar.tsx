@@ -31,8 +31,8 @@ const Navbar = () => {
   }, [backCount]);
 
   return (
-    <div className="flex flex-row flex-wrap items-center p-3 h-[6vh]">
-      <div id="pageNavigation" className="w-1/12">
+    <header className="flex justify-center items-center w-full p-4">
+      <div id="pageNavigation" className="flex h-full items-center w-1/2">
         <span>
           <FiChevronLeft
             className="mr-4 p-1 bg-slate-700 rounded-full h-8 w-8 inline-flex items-center justify-center text-white"
@@ -48,20 +48,14 @@ const Navbar = () => {
           />
         </span>
       </div>
-      <div id="search" className="w-4/12 ml-1">
-        <p>Search</p>
-      </div>
-      <div
-        id="user"
-        className="flex flex-row flex-wrap items-end basis-1 flex-grow flex-shrink"
-      >
+      <div id="user" className="flex items-center justify-end w-1/2 mr-8">
         <div>
           <a className="btn btn-success btn-lg" href={AUTH_URL}>
             Login with Spotify
           </a>
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 

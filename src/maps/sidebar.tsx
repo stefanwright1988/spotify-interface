@@ -3,23 +3,18 @@ import { FiBookOpen, FiSearch, FiHome } from "react-icons/fi";
 
 export const links = [
   {
-    title: "Menu",
-    links: [
-      {
-        name: "home",
-        link: "/",
-        icon: <FiHome />,
-      },
-      {
-        name: "Search",
-        link: "/search",
-        icon: <FiSearch />,
-      },
-      {
-        name: "playlists",
-        link: "/playlists",
-        icon: <FiBookOpen />,
-      },
-    ],
+    name: "home",
+    link: "/",
+    icon: <FiHome />,
+  },
+  {
+    name: "Search",
+    link: "/search",
+    icon: <FiSearch />,
+  },
+  {
+    name: "playlists",
+    link: "/playlists",
+    icon: <FiBookOpen />,
   },
 ];

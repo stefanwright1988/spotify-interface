@@ -115,20 +115,62 @@ app.get("/refresh_token", (req: any, res) => {
 
 app.get("/allPlaylists", async (req: any, res) => {
   const { accessToken } = req.query;
+  try {
+    const playlists = await getAllPlaylists(accessToken);
+    res.send(playlists);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(500);
+  }
+});
 
-  axios
-    .get("https://api.spotify.com/v1/me/playlists", {
+const getPlaylistsByBatch = async (accessToken, batch, limit) => {
+  return axios.get(
+    `https://api.spotify.com/v1/me/playlists?limit=${limit}&offset=${
+      batch * limit
+    }`,
+    {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
-    })
-    .then((response) => {
-      res.send(response.data);
-    })
-    .catch((error) => {
-      res.send(error);
-    });
-});
+    }
+  );
+};
+
+const getAllPlaylists = async (accessToken) => {
+  let retVal: any = {};
+  const retPromises = [];
+  let retPlaylists = [];
+  const listqueryLimit = 50;
+
+  const getPlaylist = await axios.get(
+    `https://api.spotify.com/v1/me/playlists`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+  const { data } = getPlaylist;
+  retVal = { ...data };
+
+  const trackCount = data.total;
+  const batchCount = Math.ceil(trackCount / listqueryLimit);
+  for (let batchNumber = 0; batchNumber < batchCount; batchNumber++) {
+    const fetchPlaylists = getPlaylistsByBatch(
+      accessToken,
+      batchNumber,
+      listqueryLimit
+    );
+    retPromises.push(fetchPlaylists);
+  }
+  const rawPlaylists: any = await Promise.all(retPromises);
+  for (let i = 0; i < rawPlaylists.length; i++) {
+    retPlaylists = retPlaylists.concat(rawPlaylists[i].data.items);
+  }
+  retVal.items = retPlaylists;
+  return retVal;
+};
 
 app.get("/playlist", async (req: any, res) => {
   const { accessToken, playlistId } = req.query;

@@ -19,6 +19,7 @@ import LoginCallback from "./session/LoginCallback";
 import axios from "axios";
 import spotifySlice from "./redux/slices/spotifyAuth";
 import { useAppDispatch, useAppSelector } from "./hooks/reduxHooks";
+import { fetchAllPlaylists } from "./redux/slices/spotifyPlaylists";
 
 function App() {
   //Redux
@@ -29,27 +30,6 @@ function App() {
   const { screenWidth, navActive } = useAppSelector((state: any) => state.app);
   const { spotify_access_code, spotify_refresh_code, spotify_token_expiresAt } =
     useAppSelector((state: any) => state.spotify);
-  useEffect(() => {
-    const handleResize = () => {
-      dispatch(setScreenWidth(window.innerWidth));
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    handleResize();
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (screenWidth <= 900) {
-      dispatch(setNavActive(false));
-    } else {
-      dispatch(setNavActive(true));
-    }
-  }, [screenWidth]);
 
   useEffect(() => {
     if (spotify_refresh_code) {
@@ -103,6 +83,22 @@ function App() {
       return () => clearInterval(timeout);
     }
   }, [spotify_refresh_code, spotify_access_code]);
+
+  useEffect(() => {
+    if (spotify_access_code) {
+      const abortCtrl = new AbortController();
+      const opts = { signal: abortCtrl.signal };
+      dispatch(
+        fetchAllPlaylists({
+          apiUrl: `http://localhost:5001/spotify-react-ts-vite/us-central1/app/allPlaylists?accessToken=${spotify_access_code}`,
+          opts: opts,
+        })
+      );
+      return () => {
+        abortCtrl.abort();
+      };
+    }
+  }, [dispatch, spotify_access_code]);
 
   if (!spotify_access_code || spotify_access_code === "") {
     return (
