@@ -14,11 +14,11 @@ const Default = () => {
         <div className="flex flex-wrap flex-row w-full max-h-[90vh] min-h-[90vh] aside-container">
           <aside
             id="content__left"
-            className="max-h-[10vh] md:max-h-[90vh] min-h-[10vh] md:min-h-[90vh] md:h-full w-full xl:w-1/6 bg-gray-900 text-gray-200 order-2 md:order-1 overflow-hidden xl:overflow-auto"
+            className="max-h-[5vh] lg:max-h-[90vh] min-h-[5vh] lg:min-h-[90vh] w-full lg:w-1/6 bg-gray-900 text-gray-200 order-3 lg:order-1 overflow-hidden"
           >
             <Sidebar />
           </aside>
-          <main className="flex flex-col h-full w-full xl:w-5/6 bg-gray-800 text-gray-200 order-1 md:order-2 max-h-[80vh] md:max-h-[90vh]">
+          <main className="flex flex-col h-full w-full lg:w-5/6 bg-gray-800 text-gray-200 order-1 lg:order-2 max-h-[85vh] lg:max-h-[90vh]">
             <Navbar />
             <div className="max-h-full overflow-y-auto">
               <Outlet />

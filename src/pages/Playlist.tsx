@@ -65,17 +65,19 @@ const Playlist = () => {
   return (
     <div className="h-full justify-center flex flex-col">
       <div className="w-full">
-        <div className="pt-4 pb-4 flex flex-row">
+        <div className="pt-4 pb-4 flex flex-col lg:flex-row">
           <img
-            className="w-56 mx-8 aspect-square shadow-xl"
+            className="w-56 mx-8 aspect-square shadow-xl self-center"
             src={selectedPlaylist.images[0]?.url}
           />
-          <div className="w-5/6 mx-4 flex flex-col justify-end">
+          <div className="w-full lg:w-5/6 px-4 flex flex-col justify-end">
             <span className="py-2 font-semibold">
               {selectedPlaylist.public ? "Public Playlist" : "Private Playlist"}
             </span>
-            <h1 className="text-3xl py-2">{selectedPlaylist.name}</h1>
-            <p>{selectedPlaylist.description}</p>
+            <h1 className="line-clamp-1 break-words text-3xl my-2">
+              {selectedPlaylist.name}
+            </h1>
+            <p className="line-clamp-2">{selectedPlaylist.description}</p>
             <span className="py-2">
               {selectedPlaylist.followers.total} likes,{" "}
               {selectedPlaylist.tracks.total} songs,{" "}
@@ -90,7 +92,7 @@ const Playlist = () => {
         <div className="w-full flex flex-col">
           <table
             role="table"
-            className="w-11/12 m-auto grid border-collapse grid-cols-[minmax(15px,_15px)_minmax(150px,_2fr)_minmax(150px,_1fr)_minmax(75px,_75px)] xl:grid-cols-[minmax(15px,_15px)_minmax(150px,_3fr)_minmax(150px,_1fr)_minmax(150px,_1fr)_minmax(150px,_1fr)_minmax(75px,_75px)]"
+            className="w-11/12 m-auto grid border-collapse grid-cols-[15px__2fr_1fr_75px] xl:grid-cols-[15px_3fr_1fr_1fr_1fr_75px]"
           >
             <thead role="rowgroup" className="contents border-b">
               <tr role="row" className="contents">

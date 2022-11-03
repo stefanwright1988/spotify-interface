@@ -20,10 +20,9 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className="flex flex-col max-h-[90%] min-h-[90%]">
-        <div className="h-8 w-8 mt-2 ml-4 fill-current text-white">&nbsp;</div>
-        <nav className="mb-4 mt-4">
-          <ul>
+      <div className="flex flex-col justify-center max-h-full xl:max-h-[90%] min-h-full xl:min-h-[90%]">
+        <nav className="mb-0 xl:mb-4 mt-0 xl:mt-4">
+          <ul className="flex flex-row justify-around content-center items-center flex-nowrap lg:block">
             {links.map((subLink, index) => (
               <li key={index}>
                 <NavLink
@@ -44,7 +43,7 @@ const Sidebar = () => {
             ))}
           </ul>
         </nav>
-        <div className="mb-4">
+        <div className="mb-4 hidden xl:block">
           <h2 className="pl-4 uppercase text-xs text-gray-400 tracking-widest mb-2">
             Your Library
           </h2>
@@ -67,16 +66,16 @@ const Sidebar = () => {
             Podcasts
           </p>
         </div>
-        <h2 className="uppercase text-xs text-gray-400 tracking-widest mb-2 pl-4">
+        <h2 className="hidden xl:block uppercase text-xs text-gray-400 tracking-widest mb-2 pl-4">
           Playlists
         </h2>
-        <div className="side-lists max-h-full overflow-y-auto">
+        <div className="hidden xl:block side-lists max-h-full overflow-y-auto">
           <div className="mb-10">
             <PlaylistsList />
           </div>
         </div>
       </div>
-      <div className="flex flex-wrap items-center align-middle min-h-[10%] max-h-[10%] pl-6 pr-6 border-t-2 border-gray-800 fill-current text-gray-400 hover:text-white">
+      <div className="hidden lg:flex lg:flex-wrap lg:items-center lg:align-middle lg:min-h-[10%] lg:max-h-[10%] lg:pl-6 lg:pr-6 lg:border-t-2 lg:border-gray-800 lg:fill-current lg:text-gray-400 lg:hover:text-white">
         <svg
           className="h-8 w-8 mr-2"
           xmlns="http://www.w3.org/2000/svg"

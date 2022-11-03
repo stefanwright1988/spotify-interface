@@ -4,7 +4,7 @@ const Playback = () => {
   return (
     <section
       id="current__track"
-      className="w-full bg-gray-700 text-white player-container max-h-[10vh] min-h-[10vh] h-[10vh] order-3"
+      className="w-full bg-gray-700 text-white player-container max-h-[10vh] min-h-[10vh] h-[10vh] order-2"
     >
       <div className="flex h-full items-center justify-between">
         <div className="h-full text-gray-700 px-4 py-4 w-1/3 lg:w-1/4 mr-2">
