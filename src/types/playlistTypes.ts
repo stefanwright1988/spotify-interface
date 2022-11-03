@@ -69,7 +69,7 @@ export interface ITrackList {
 
 export interface ITrack {
   album: IAlbum;
-  artists: [IArtists];
+  artists: IArtists[];
   available_markets: [string];
   disc_number: number;
   duration_ms: number;
@@ -95,14 +95,14 @@ export interface ITrack {
 
 export interface IAlbum {
   album_type: string;
-  artists: [IArtists];
+  artists: IArtists[];
   available_markets: [string];
   external_urls: {
     spotify: string;
   };
   href: string;
   id: string;
-  images: [IAlbumImages];
+  images: IAlbumImages[];
   name: string;
   release_date: string;
   release_date_precision: string;

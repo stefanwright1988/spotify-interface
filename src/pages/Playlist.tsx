@@ -70,7 +70,7 @@ const Playlist = () => {
             className="w-56 mx-8 aspect-square shadow-xl self-center"
             src={selectedPlaylist.images[0]?.url}
           />
-          <div className="w-full lg:w-5/6 px-4 flex flex-col justify-end">
+          <div className="w-full lg:w-5/6 px-4 flex flex-col justify-around items-start">
             <span className="py-2 font-semibold">
               {selectedPlaylist.public ? "Public Playlist" : "Private Playlist"}
             </span>
@@ -79,6 +79,7 @@ const Playlist = () => {
             </h1>
             <p className="line-clamp-2">{selectedPlaylist.description}</p>
             <span className="py-2">
+              {/* TODO follower and track counts needs to have seperators added */}
               {selectedPlaylist.followers.total} likes,{" "}
               {selectedPlaylist.tracks.total} songs,{" "}
               <span className="font-thin">{convertedTotalTrackLength}</span>
@@ -92,7 +93,7 @@ const Playlist = () => {
         <div className="w-full flex flex-col">
           <table
             role="table"
-            className="w-11/12 m-auto grid border-collapse gap-1 grid-cols-[15px_1fr] sm:grid-cols-[15px__1fr_1fr_75px] xl:grid-cols-[15px_3fr_1fr_1fr_1fr_75px]"
+            className="w-11/12 m-auto grid border-collapse gap-1 grid-cols-[15px_1fr] sm:grid-cols-[15px__1fr_1fr_75px] xl:grid-cols-[15px_minmax(200px,_2fr)_1fr_1fr_1fr_75px]"
           >
             <thead role="rowgroup" className="contents border-b">
               <tr role="row" className="contents">
@@ -139,12 +140,12 @@ const Playlist = () => {
             <tbody role="rowgroup" className="contents">
               {selectedPlaylist.tracks.items.map((tracks, index) => {
                 const { added_at, added_by } = tracks;
-                const { name, album, duration_ms } = tracks.track;
+                const { name, album, duration_ms, artists } = tracks.track;
                 const albumThumb = album.images.filter((image) => {
                   return image.height === 64;
                 })[0];
                 return (
-                  <tr role="row" className="contents border-b">
+                  <tr role="row" className="contents border-b" key={index}>
                     <td role="cell" className="px-2 py-4 text-sm font-medium ">
                       {index + 1}
                     </td>
@@ -158,7 +159,8 @@ const Playlist = () => {
                         </div>
                         <div className="flex flex-col ml-4">
                           <p>{name}</p>
-                          <span>Artists</span>
+                          {/* TODO This should be the result of reducing the array for multiple artists */}
+                          <span>{artists[0].name}</span>
                         </div>
                       </div>
                     </td>
