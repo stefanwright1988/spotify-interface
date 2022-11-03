@@ -18,7 +18,7 @@ const Default = () => {
           >
             <Sidebar />
           </aside>
-          <main className="flex flex-col h-full w-full lg:w-5/6 bg-gray-800 text-gray-200 order-1 lg:order-2 max-h-[85vh] lg:max-h-[90vh]">
+          <main className="flex flex-col h-full w-full lg:w-5/6 bg-gray-800 text-gray-200 order-1 lg:order-2 max-h-[85vh] lg:max-h-[90vh] min-h-[85vh] lg:min-h-[90vh]">
             <Navbar />
             <div className="max-h-full overflow-y-auto">
               <Outlet />

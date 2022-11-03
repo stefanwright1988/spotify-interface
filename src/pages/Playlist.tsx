@@ -92,7 +92,7 @@ const Playlist = () => {
         <div className="w-full flex flex-col">
           <table
             role="table"
-            className="w-11/12 m-auto grid border-collapse grid-cols-[15px__2fr_1fr_75px] xl:grid-cols-[15px_3fr_1fr_1fr_1fr_75px]"
+            className="w-11/12 m-auto grid border-collapse gap-1 grid-cols-[15px_1fr] sm:grid-cols-[15px__1fr_1fr_75px] xl:grid-cols-[15px_3fr_1fr_1fr_1fr_75px]"
           >
             <thead role="rowgroup" className="contents border-b">
               <tr role="row" className="contents">
@@ -110,7 +110,7 @@ const Playlist = () => {
                 </th>
                 <th
                   role="columnheader"
-                  className="text-sm uppercase font-medium px-6 py-4 text-left"
+                  className="text-sm uppercase font-medium px-6 py-4 text-left hidden sm:table-cell"
                 >
                   Album
                 </th>
@@ -128,7 +128,7 @@ const Playlist = () => {
                 </th>
                 <th
                   role="columnheader"
-                  className="text-sm uppercase font-medium px-2 py-4"
+                  className="text-sm uppercase font-medium px-2 py-4 hidden sm:table-cell"
                 >
                   <div className=" md:flex flex-row justify-center items-center content-center flex-wrap">
                     <FaRegClock />
@@ -156,13 +156,16 @@ const Playlist = () => {
                             className="min-w-[48px] aspect-square"
                           />
                         </div>
-                        <div className="flex flex-col">
+                        <div className="flex flex-col ml-4">
                           <p>{name}</p>
                           <span>Artists</span>
                         </div>
                       </div>
                     </td>
-                    <td role="cell" className="text-sm font-light px-6 py-4">
+                    <td
+                      role="cell"
+                      className="text-sm font-light px-6 py-4 hidden sm:table-cell"
+                    >
                       <span>{album.name}</span>
                     </td>
                     <td
@@ -177,7 +180,10 @@ const Playlist = () => {
                     >
                       {formatUTCDateToISO(added_at).toLocaleDateString()}
                     </td>
-                    <td role="cell" className="text-sm font-light px-2 py-4">
+                    <td
+                      role="cell"
+                      className="text-sm font-light px-2 py-4 hidden sm:table-cell"
+                    >
                       {convertMsToTime(Number(duration_ms))}
                     </td>
                   </tr>

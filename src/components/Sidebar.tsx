@@ -15,8 +15,8 @@ const Sidebar = () => {
     }
   };
 
-  const activeLink = `flex flex-wrap items-center fill-current text-white font-bold pt-2 pb-2 border-l-4 border-green-500`;
-  const inactiveLink = `flex flex-wrap items-center fill-current text-white font-bold pt-2 pb-2 border-l-4 border-transparent`;
+  const activeLink = `flex flex-wrap items-center fill-current text-white font-bold pt-2 pb-2 xl:border-l-4 xl:border-green-500`;
+  const inactiveLink = `flex flex-wrap items-center fill-current text-white font-bold pt-2 pb-2 xl:border-l-4 xl:border-transparent`;
 
   return (
     <>
