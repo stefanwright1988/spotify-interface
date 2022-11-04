@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { FaRegClock } from "react-icons/fa";
+import { FaPlayCircle, FaRegClock } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import { convertMsToTime, formatUTCDateToISO } from "../helpers/datetime";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
@@ -146,16 +146,25 @@ const Playlist = () => {
                 })[0];
                 return (
                   <tr role="row" className="contents border-b" key={index}>
-                    <td role="cell" className="px-2 py-4 text-sm font-medium ">
-                      {index + 1}
+                    <td role="cell" className="px-2 py-2 text-sm font-medium ">
+                      <div className="flex flex-row items-center h-full">
+                        <span>{index + 1}</span>
+                      </div>
                     </td>
-                    <td role="cell" className="text-sm font-light px-6 py-4">
-                      <div className="flex flex-row">
-                        <div>
+                    <td role="cell" className="text-sm font-light px-6 py-2">
+                      <div className="flex flex-row items-center">
+                        <div className="min-w-[48px] aspect-square group relative">
                           <img
                             src={albumThumb?.url}
-                            className="min-w-[48px] aspect-square"
+                            className="object-cover w-full"
                           />
+                          <div
+                            id="overlay"
+                            className="absolute top-0 left-0 w-full h-0 flex flex-col justify-center items-center bg-indigo-700 opacity-0 group-hover:h-full group-hover:opacity-100"
+                          >
+                            {/* TODO onClick handle, sizing? */}
+                            <FaPlayCircle />
+                          </div>
                         </div>
                         <div className="flex flex-col ml-4">
                           <p>{name}</p>
@@ -166,27 +175,37 @@ const Playlist = () => {
                     </td>
                     <td
                       role="cell"
-                      className="text-sm font-light px-6 py-4 hidden sm:table-cell"
+                      className="text-sm font-light px-6 py-2 hidden sm:table-cell"
                     >
-                      <span>{album.name}</span>
+                      <div className="flex flex-row items-center h-full">
+                        <span>{album.name}</span>
+                      </div>
                     </td>
                     <td
                       role="cell"
-                      className="text-sm font-light px-6 py-4 hidden xl:table-cell"
+                      className="text-sm font-light px-6 py-2 hidden xl:table-cell"
                     >
-                      {added_by.id}
+                      <div className="flex flex-row items-center h-full">
+                        <span>{added_by.id}</span>
+                      </div>
                     </td>
                     <td
                       role="cell"
-                      className="text-sm font-light px-6 py-4 hidden xl:table-cell"
+                      className="text-sm font-light px-6 py-2 hidden xl:table-cell"
                     >
-                      {formatUTCDateToISO(added_at).toLocaleDateString()}
+                      <div className="flex flex-row items-center h-full">
+                        <span>
+                          {formatUTCDateToISO(added_at).toLocaleDateString()}
+                        </span>
+                      </div>
                     </td>
                     <td
                       role="cell"
-                      className="text-sm font-light px-2 py-4 hidden sm:table-cell"
+                      className="text-sm font-light px-2 py-2 hidden sm:table-cell"
                     >
-                      {convertMsToTime(Number(duration_ms))}
+                      <div className="flex flex-row items-center h-full">
+                        <span>{convertMsToTime(Number(duration_ms))}</span>
+                      </div>
                     </td>
                   </tr>
                 );
