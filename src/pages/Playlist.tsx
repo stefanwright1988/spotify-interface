@@ -162,13 +162,17 @@ const Playlist = () => {
                             id="overlay"
                             className="absolute top-0 left-0 w-full h-0 flex flex-col justify-center items-center bg-indigo-700 opacity-0 group-hover:h-full group-hover:opacity-100"
                           >
-                            {/* TODO onClick handle, sizing? */}
+                            {/* TODO onClick handle, sizing?
+                             */}
                             <FaPlayCircle />
                           </div>
                         </div>
                         <div className="flex flex-col ml-4">
                           <p>{name}</p>
-                          {/* TODO This should be the result of reducing the array for multiple artists */}
+                          {/* TODO This should be the result of reducing the array for multiple artists
+                           */}
+                          {/* TODO Also need to make individual links
+                           */}
                           <span>{artists[0].name}</span>
                         </div>
                       </div>
@@ -178,6 +182,8 @@ const Playlist = () => {
                       className="text-sm font-light px-6 py-2 hidden sm:table-cell"
                     >
                       <div className="flex flex-row items-center h-full">
+                        {/*TODO Also need to make album link
+                         */}
                         <span>{album.name}</span>
                       </div>
                     </td>
