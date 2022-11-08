@@ -31,6 +31,8 @@ const Playlists = () => {
               className="flex text-white text-2xl flex-col justify-end bg-zinc-800 p-3 rounded-xl overflow-hidden"
             >
               <div className="shadow-lg">
+                {/* TODO Fix when no image
+                 */}
                 <img
                   className="w-full aspect-square "
                   src={playlist.images[0]?.url}
