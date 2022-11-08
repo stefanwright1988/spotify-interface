@@ -42,7 +42,7 @@ const Playlists = () => {
                     src={playlist.images[0]?.url}
                   />
                 ) : (
-                  <div className="w-full aspect-square flex items-center content-center justify-center">
+                  <div className="w-full aspect-square flex items-center content-center justify-center bg-gray-500">
                     <GiMusicalNotes />
                   </div>
                 )}
