@@ -47,7 +47,7 @@ const Playlists = () => {
                   </div>
                 )}
                 <div
-                  className="absolute top-0 left-0 w-full h-0 flex flex-col justify-center items-center opacity-0 group-hover:h-full group-hover:opacity-70 bg-gray-900
+                  className="absolute top-0 left-0 w-full h-0 flex flex-col justify-center items-center opacity-0 group-hover:h-full group-hover:opacity-40 bg-gray-900
                   "
                 ></div>
                 <div
