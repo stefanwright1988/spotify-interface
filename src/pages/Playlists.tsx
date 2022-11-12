@@ -4,19 +4,16 @@ import { Link } from "react-router-dom";
 import { GiMusicalNotes } from "react-icons/gi";
 import { FaPlay, FaPlayCircle } from "react-icons/fa";
 import { CgPlayButtonO } from "react-icons/cg";
+import Spinner from "../components/Spinner";
 
 const Playlists = () => {
-  const playlistsFetchState = useAppSelector((state: any) => state.playlists);
+  const playlistsState = useAppSelector((state: any) => state.playlists);
 
-  if (playlistsFetchState.fetchState === "loading") {
-    return (
-      <div>
-        <p>...LOADING PLAYLISTS</p>
-      </div>
-    );
+  if (playlistsState.playlistsFetchState === "loading") {
+    return <Spinner />;
   }
 
-  if (playlistsFetchState.fetchState === "error") {
+  if (playlistsState.playlistsFetchState === "error") {
     return (
       <div>
         <p>...ERROR LOADING PLAYLISTS</p>
@@ -25,15 +22,15 @@ const Playlists = () => {
   }
 
   return (
-    <div className="grid grid-cols-[repeat(auto-fit,_minmax(160px,_1fr))] gap-4 px-12 py-6">
-      {playlistsFetchState.playlists.items?.map(
+    <div className="grid grid-cols-[repeat(auto-fit,_minmax(160px,_1fr))] gap-5 px-6 py-6">
+      {playlistsState.playlists.items?.map(
         (playlist: IPlaylist, index: number) => {
           return (
             <div
               key={index}
-              className="flex text-white text-2xl flex-col justify-end p-3 rounded-md overflow-hidden bg-gray-900 hover:bg-gray-700 group "
+              className="flex text-white text-2xl flex-col justify-end p-3 rounded-xl overflow-hidden bg-gray-900 hover:bg-gray-700 group shadow-2xl shadow-black"
             >
-              <div className="shadow-xl relative">
+              <div className="relative rounded-3xl overflow-hidden">
                 {/* TODO Fix when no image
                  */}
                 {playlist.images[0] ? (
