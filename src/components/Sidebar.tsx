@@ -47,30 +47,30 @@ const Sidebar = () => {
           <h2 className="pl-4 uppercase text-xs text-gray-400 tracking-widest mb-2">
             Your Library
           </h2>
-          <p className="pl-6 mb-2 text-sm tracking-wide text-gray-400 hover:text-white font-medium">
+          <p className="bg-gray-900 pl-6 mb-2 text-sm tracking-wide text-gray-400 hover:text-white font-medium border-l-4 border-transparent line-clamp-1">
             Made For You
           </p>
-          <p className="pl-6 mb-2 text-sm tracking-wide text-gray-400 hover:text-white font-medium">
+          <p className="bg-gray-900 pl-6 mb-2 text-sm tracking-wide text-gray-400 hover:text-white font-medium border-l-4 border-transparent line-clamp-1">
             Recently Played
           </p>
-          <p className="pl-6 mb-2 text-sm tracking-wide text-gray-400 hover:text-white font-medium">
+          <p className="bg-gray-900 pl-6 mb-2 text-sm tracking-wide text-gray-400 hover:text-white font-medium border-l-4 border-transparent line-clamp-1">
             Liked Songs
           </p>
-          <p className="pl-6 mb-2 text-sm tracking-wide text-gray-400 hover:text-white font-medium">
+          <p className="bg-gray-900 pl-6 mb-2 text-sm tracking-wide text-gray-400 hover:text-white font-medium border-l-4 border-transparent line-clamp-1">
             Albums
           </p>
-          <p className="pl-6 mb-2 text-sm tracking-wide text-gray-400 hover:text-white font-medium">
+          <p className="bg-gray-900 pl-6 mb-2 text-sm tracking-wide text-gray-400 hover:text-white font-medium border-l-4 border-transparent line-clamp-1">
             Artists
           </p>
-          <p className="pl-6 mb-2 text-sm tracking-wide text-gray-400 hover:text-white font-medium">
+          <p className="bg-gray-900 pl-6 mb-2 text-sm tracking-wide text-gray-400 hover:text-white font-medium border-l-4 border-transparent line-clamp-1">
             Podcasts
           </p>
         </div>
         <h2 className="hidden xl:block uppercase text-xs text-gray-400 tracking-widest mb-2 pl-4">
           Playlists
         </h2>
-        <div className="hidden xl:block side-lists max-h-full overflow-y-auto">
-          <div className="mb-10">
+        <div className="hidden xl:block side-lists max-h-full overflow-y-auto mr-2">
+          <div className="mb-10 pr-2">
             <PlaylistsList />
           </div>
         </div>

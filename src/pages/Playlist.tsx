@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { FaPlayCircle, FaRegClock } from "react-icons/fa";
 import { useParams } from "react-router-dom";
+import Spinner from "../components/Spinner";
 import { convertMsToTime, formatUTCDateToISO } from "../helpers/datetime";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 import { fetchPlaylist } from "../redux/slices/spotifyPlaylists";
@@ -36,11 +37,7 @@ const Playlist = () => {
     selectedPlaylistFetchState === "loading" ||
     selectedPlaylistFetchState === "idle"
   ) {
-    return (
-      <div>
-        <p>...LOADING PLAYLISTS</p>
-      </div>
-    );
+    return <Spinner />;
   }
 
   if (selectedPlaylistFetchState === "error") {
