@@ -27,7 +27,7 @@ const PlaylistsList = () => {
     );
   }
 
-  const activeLink = `bg-gray-900 pl-6 mb-2 text-sm tracking-wide text-white font-bold border-l-4 border-green-500 sticky top-0 line-clamp-1`;
+  const activeLink = `bg-gray-900 pl-6 mb-2 text-sm tracking-wide text-white font-bold border-l-4 border-green-500 line-clamp-1`;
   const inactiveLink = `bg-gray-900 pl-6 mb-2 text-sm tracking-wide text-gray-400 hover:text-white font-medium border-l-4 border-transparent line-clamp-1`;
 
   return (
