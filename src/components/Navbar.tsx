@@ -2,6 +2,11 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../hooks/reduxHooks";
 import { FiChevronRight, FiChevronLeft } from "react-icons/fi";
+import {
+  CgArrowLongLeftC,
+  CgChevronLeftO,
+  CgChevronRightO,
+} from "react-icons/cg";
 
 const Navbar = () => {
   const AUTH_URL = import.meta.env.VITE_AUTH_URL;
@@ -34,13 +39,13 @@ const Navbar = () => {
     <header className="flex justify-center items-center w-full p-4">
       <div id="pageNavigation" className="flex h-full items-center w-1/2">
         <span>
-          <FiChevronLeft
-            className="mr-4 p-1 bg-slate-700 rounded-full h-8 w-8 inline-flex items-center justify-center text-white"
+          <CgChevronLeftO
+            className="p-1 bg-slate-700 rounded-full h-8 w-8 inline-flex items-center justify-center mr-2"
             onClick={() => handleBack()}
           />
         </span>
         <span>
-          <FiChevronRight
+          <CgChevronRightO
             className={`p-1 bg-slate-700 rounded-full h-8 w-8 inline-flex items-center justify-center text-white ${
               userWentBack ? `` : `cursor-not-allowed`
             }`}
