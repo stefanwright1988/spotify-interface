@@ -20,7 +20,7 @@ const Sidebar = () => {
 
   return (
     <>
-      <div className="flex flex-col justify-center max-h-full min-h-full xl:grid xl:grid-rows-[1fr_1fr_2fr]">
+      <div className="flex flex-col max-h-full min-h-full xl:grid xl:grid-rows-[1fr_1fr_2fr]">
         <nav className="mb-0 xl:mb-2 mt-0 xl:mt-4 bg-gray-900 m-2 xl:rounded-xl xl:py-2 xl:shadow-md xl:shadow-black">
           <ul className="flex flex-row justify-around content-center items-center flex-nowrap lg:block">
             {links.map((subLink, index) => (
@@ -71,7 +71,7 @@ const Sidebar = () => {
             Playlists
           </h2>
           <div className="overflow-y-auto mr-2 h-[calc(100%_-_26px)]">
-            <div className="pr-2">
+            <div className="pr-2 h-full">
               <PlaylistsList />
             </div>
           </div>
