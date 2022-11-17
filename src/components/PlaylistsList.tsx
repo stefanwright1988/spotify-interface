@@ -2,32 +2,24 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { useAppSelector } from "../hooks/reduxHooks";
 import { IPlaylist } from "../types/playlistTypes";
+import Spinner from "./Spinner";
 
 const PlaylistsList = () => {
   const playlists = useAppSelector((state: any) => state.playlists);
 
-  if (
-    playlists.playlistsFetchState === "idle" ||
-    playlists.playlistsFetchState === "loading"
-  ) {
-    return (
-      <>
-        <p className="mb-2 text-sm tracking-wide text-gray-400 hover:text-white font-medium line-clamp-1">
-          ...LOADING PLAYLISTS
-        </p>
-      </>
-    );
+  if (playlists.playlistsFetchState === "loading") {
+    return <Spinner />;
   }
 
   if (playlists.playlistsFetchState === "error") {
     return (
-      <p className="mb-2 text-sm tracking-wide text-gray-400 hover:text-white font-medium line-clamp-1">
-        ...ERROR LOADING PLAYLISTS
-      </p>
+      <div>
+        <p>...ERROR LOADING PLAYLISTS</p>
+      </div>
     );
   }
 
-  const activeLink = `bg-gray-900 pl-6 mb-2 text-sm tracking-wide text-white font-bold border-l-4 border-green-500 sticky top-0 line-clamp-1`;
+  const activeLink = `bg-gray-900 pl-6 mb-2 text-sm tracking-wide text-white font-bold border-l-4 border-green-500 line-clamp-1`;
   const inactiveLink = `bg-gray-900 pl-6 mb-2 text-sm tracking-wide text-gray-400 hover:text-white font-medium border-l-4 border-transparent line-clamp-1`;
 
   return (
