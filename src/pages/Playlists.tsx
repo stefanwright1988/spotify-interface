@@ -28,7 +28,7 @@ const Playlists = () => {
           return (
             <div
               key={index}
-              className="flex text-white text-2xl flex-col justify-end p-3 rounded-xl overflow-hidden bg-gray-900 hover:bg-gray-700 group shadow-2xl shadow-black"
+              className="flex text-white text-2xl flex-col justify-end p-3 rounded-xl overflow-hidden bg-gray-900 hover:bg-gray-700 group shadow-lg shadow-black"
             >
               <div className="relative rounded-3xl overflow-hidden">
                 {/* TODO Fix when no image
