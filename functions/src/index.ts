@@ -48,6 +48,7 @@ app.get("/callback", (req: any, res) => {
       "utf-8"
     ).toString("base64")}`,
   };
+  console.log(`code is: ${code}`);
   const data = querystring.stringify({
     grant_type: "authorization_code",
     code: code,
@@ -75,11 +76,11 @@ app.get("/callback", (req: any, res) => {
       } else if (error.request) {
         // The request was made but no response was received
         console.log(error.request);
-        retVal = { error: error.request };
+        retVal = { error: error.request, status: error.response.status };
       } else {
         // Something happened in setting up the request that triggered an Error
         console.log("Error", error.message);
-        retVal = { error: error.message };
+        retVal = { error: error.message, status: error.response.status };
       }
     })
     .finally(() => {
