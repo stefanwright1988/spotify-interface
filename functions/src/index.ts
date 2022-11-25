@@ -40,14 +40,23 @@ app.get("/login", (req, res) => {
 app.get("/callback", (req: any, res) => {
   const code = req.query.code || null;
   let retVal = {};
+  const controller = new AbortController();
 
-  const headers = {
-    "content-type": "application/x-www-form-urlencoded",
-    Authorization: `Basic ${Buffer.from(
-      `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`,
-      "utf-8"
-    ).toString("base64")}`,
+  req.on("close", function (err) {
+    controller.abort();
+  });
+
+  const options = {
+    headers: {
+      "content-type": "application/x-www-form-urlencoded",
+      Authorization: `Basic ${Buffer.from(
+        `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`,
+        "utf-8"
+      ).toString("base64")}`,
+    },
+    signal: controller.signal,
   };
+
   console.log(`code is: ${code}`);
   const data = querystring.stringify({
     grant_type: "authorization_code",
@@ -55,7 +64,7 @@ app.get("/callback", (req: any, res) => {
     redirect_uri: process.env.SPOTIFY_REDIRECT_URI,
   });
   axios
-    .post("https://accounts.spotify.com/api/token", data, { headers })
+    .post("https://accounts.spotify.com/api/token", data, options)
     .then(async (tokenResponse) => {
       if (tokenResponse.status === 200) {
         retVal = { ...retVal, ...tokenResponse.data };
