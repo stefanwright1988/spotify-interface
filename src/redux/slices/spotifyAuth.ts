@@ -6,14 +6,10 @@ const spotifySlice = createSlice({
   name: "spotify",
   initialState: {
     spotify_access_code: "",
-    spotify_access_token: "",
     spotify_refresh_code: "",
     spotify_token_expiresAt: 3600,
   },
   reducers: {
-    setSpotifyAccessToken: (state, action: PayloadAction<string>) => {
-      state.spotify_access_token = action.payload;
-    },
     setSpotifyAccessCode: (state, action: PayloadAction<string>) => {
       state.spotify_access_code = action.payload;
     },
@@ -33,7 +29,7 @@ const spotifySlice = createSlice({
         authApi.endpoints.callback.matchFulfilled,
         (state, action) => {
           console.log("fulfilled", action);
-          state.spotify_access_token = action.payload.token;
+          state.spotify_access_code = action.payload.token;
         }
       )
       .addMatcher(authApi.endpoints.callback.matchRejected, (state, action) => {
