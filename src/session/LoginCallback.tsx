@@ -4,15 +4,16 @@ import { useEffect } from "react";
 import axios from "axios";
 import spotifySlice from "../redux/slices/spotifyAuth";
 import { useAppDispatch } from "../hooks/reduxHooks";
+import { useCallbackMutation } from "../redux/api/auth";
 
 const LoginCallback = () => {
-  const dispatch = useAppDispatch();
+  //const dispatch = useAppDispatch();
   const [searchParams] = useSearchParams();
   const accessCode = searchParams.get("code");
-  const { setSpotifyAccessCode, setSpotifyRefreshCode, setSpotifyExpiresAt } =
-    spotifySlice.actions;
+  /*   const { setSpotifyAccessCode, setSpotifyRefreshCode, setSpotifyExpiresAt } =
+    spotifySlice.actions; */
 
-  useEffect(() => {
+  /* useEffect(() => {
     const controller: AbortController = new AbortController();
     const signal: AbortSignal = controller.signal;
     const performLogin = async () => {
@@ -38,14 +39,24 @@ const LoginCallback = () => {
     return () => {
       controller.abort();
     };
-  }, [accessCode]);
+  }, [accessCode]); */
 
-  return (
-    <div>
-      <FaSpinner />
-      <p>Logging you in...</p>
-    </div>
-  );
+  if (accessCode != null) {
+    const [callback, { isLoading, isSuccess }] = useCallbackMutation();
+
+    callback(accessCode);
+    if (isLoading) {
+      return (
+        <div>
+          <FaSpinner />
+          <p>Logging you in...</p>
+        </div>
+      );
+    }
+    if (isSuccess) {
+      window.history.pushState({}, "", "/");
+    }
+  }
 };
 
 export default LoginCallback;

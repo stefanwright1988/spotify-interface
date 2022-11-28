@@ -37,14 +37,9 @@ app.get("/login", (req, res) => {
   res.redirect(`https://accounts.spotify.com/authorize?${queryParams}`);
 });
 
-app.get("/callback", (req: any, res) => {
-  const code = req.query.code || null;
+app.post("/callback", (req: any, res) => {
+  const code = req.body || null;
   let retVal = {};
-  const controller = new AbortController();
-
-  req.on("close", function (err) {
-    controller.abort();
-  });
 
   const options = {
     headers: {
@@ -54,7 +49,6 @@ app.get("/callback", (req: any, res) => {
         "utf-8"
       ).toString("base64")}`,
     },
-    signal: controller.signal,
   };
 
   console.log(`code is: ${code}`);
