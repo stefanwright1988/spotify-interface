@@ -29,7 +29,7 @@ const spotifySlice = createSlice({
         authApi.endpoints.callback.matchFulfilled,
         (state, action) => {
           console.log("fulfilled", action);
-          state.spotify_access_code = action.payload.token;
+          state.spotify_access_code = action.payload.access_token;
         }
       )
       .addMatcher(authApi.endpoints.callback.matchRejected, (state, action) => {
