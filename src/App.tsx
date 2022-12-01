@@ -20,6 +20,7 @@ import axios from "axios";
 import spotifySlice from "./redux/slices/spotifyAuth";
 import { useAppDispatch, useAppSelector } from "./hooks/reduxHooks";
 import { fetchAllPlaylists } from "./redux/slices/spotifyPlaylists";
+import { useReauthQuery, useTestQuery } from "./redux/api/auth";
 
 function App() {
   //Redux
@@ -31,7 +32,24 @@ function App() {
   const { spotify_access_code, spotify_refresh_code, spotify_token_expiresAt } =
     useAppSelector((state: any) => state.spotify);
 
-  useEffect(() => {
+  const { data, status, error, refetch } = useTestQuery("hi");
+
+  if (spotify_refresh_code) {
+    /* const { data, status, error, refetch } = useReauthQuery(
+      spotify_refresh_code,
+      {
+        pollingInterval: 1800000,
+      }
+    ); */
+    /* if (data) {
+      dispatch(setSpotifyAccessCode(data.access_token));
+      dispatch(
+        setSpotifyExpiresAt(Date.now() + data.expires_in * 1000 - 10000)
+      );
+    } */
+  }
+
+  /* useEffect(() => {
     if (spotify_refresh_code) {
       const controller: AbortController = new AbortController();
       const signal: AbortSignal = controller.signal;
@@ -82,7 +100,7 @@ function App() {
 
       return () => clearInterval(timeout);
     }
-  }, [spotify_refresh_code, spotify_access_code]);
+  }, [spotify_refresh_code, spotify_access_code]); */
 
   useEffect(() => {
     if (spotify_access_code) {

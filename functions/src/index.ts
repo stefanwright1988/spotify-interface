@@ -21,7 +21,12 @@ const generateRandomString = (length) => {
 
 const stateKey = "spotify_state_key";
 
+app.get("/hello", (req, res) => {
+  res.status(200).send("hello world");
+});
+
 app.get("/login", (req, res) => {
+  console.log(req.headers);
   const state = generateRandomString(16);
   res.cookie(stateKey, state);
 
@@ -123,6 +128,7 @@ app.get("/refresh_token", (req: any, res) => {
 
 app.get("/allPlaylists", async (req: any, res) => {
   const { accessToken } = req.query;
+  console.log(req.headers);
   try {
     const playlists = await getAllPlaylists(accessToken);
     res.send(playlists);

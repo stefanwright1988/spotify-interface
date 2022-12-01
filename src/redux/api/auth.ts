@@ -12,10 +12,15 @@ export const authApi = api.injectEndpoints({
         body: bodyContent,
       }),
     }),
+    test: build.query({
+      query: () => ({
+        url: "hello",
+      }),
+    }),
   }),
 });
 
-export const { useCallbackQuery } = authApi;
+export const { useCallbackQuery, useTestQuery } = authApi;
 
 export const {
   endpoints: { callback },

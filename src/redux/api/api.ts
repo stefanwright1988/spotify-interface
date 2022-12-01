@@ -4,9 +4,16 @@ import { RootState } from "../store";
 // Create our baseQuery instance
 const baseQuery = fetchBaseQuery({
   baseUrl: "http://localhost:5001/spotify-react-ts-vite/us-central1/app/",
+  prepareHeaders: (headers, { getState }) => {
+    const token = (getState() as RootState).spotify.spotify_access_code;
+    if (token) {
+      headers.set("rtkAuthToken", `${token}`);
+    }
+    return headers;
+  },
 });
 
-const baseQueryWithRetry = retry(baseQuery, { maxRetries: 6 });
+const baseQueryWithRetry = retry(baseQuery, { maxRetries: 2 });
 
 /**
  * Create a base API to inject endpoints into elsewhere.
@@ -15,6 +22,7 @@ const baseQueryWithRetry = retry(baseQuery, { maxRetries: 6 });
  * and to ensure that the file injecting the endpoints is loaded
  */
 export const api = createApi({
+  reducerPath: "api",
   /**
    * A bare bones base query would just be `baseQuery: fetchBaseQuery({ baseUrl: '/' })`
    */

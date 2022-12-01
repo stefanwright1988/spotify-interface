@@ -8,7 +8,15 @@ import playlistsSlice from "../slices/spotifyPlaylists";
 import spotifySlice from "../slices/spotifyAuth";
 import thunkMiddleware from "redux-thunk";
 import storage from "redux-persist/lib/storage";
-import { persistReducer } from "redux-persist";
+import {
+  FLUSH,
+  PAUSE,
+  PERSIST,
+  persistReducer,
+  PURGE,
+  REGISTER,
+  REHYDRATE,
+} from "redux-persist";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { api } from "../api/api";
 
@@ -31,7 +39,11 @@ export const createStore = (
   configureStore({
     reducer: reducers,
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(api.middleware),
+      getDefaultMiddleware({
+        serializableCheck: {
+          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        },
+      }).concat(api.middleware),
     ...options,
   });
 
