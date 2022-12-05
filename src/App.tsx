@@ -20,7 +20,7 @@ import axios from "axios";
 import spotifySlice from "./redux/slices/spotifyAuth";
 import { useAppDispatch, useAppSelector } from "./hooks/reduxHooks";
 import { fetchAllPlaylists } from "./redux/slices/spotifyPlaylists";
-import { useReauthQuery, useTestQuery } from "./redux/api/auth";
+import { useTestQuery } from "./redux/api/auth";
 
 function App() {
   //Redux

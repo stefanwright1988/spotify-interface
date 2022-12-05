@@ -22,7 +22,7 @@ const generateRandomString = (length) => {
 const stateKey = "spotify_state_key";
 
 app.get("/hello", (req, res) => {
-  res.status(200).send("hello world");
+  res.status(200).send({ response: "Hello world" });
 });
 
 app.get("/login", (req, res) => {
@@ -96,34 +96,38 @@ app.post("/callback", (req: any, res) => {
     });
 });
 
-app.get("/refresh_token", (req: any, res) => {
-  const { refreshToken } = req.query;
+app.get("/refresh_token", (req: any, res: any) => {
+  const refreshToken = req.headers["rtkauthtoken"];
 
-  axios
-    .post(
-      "https://accounts.spotify.com/api/token",
-      querystring.stringify({
-        grant_type: "refresh_token",
-        refresh_token: refreshToken,
-      }),
-      {
-        headers: {
-          "content-type": "application/x-www-form-urlencoded",
-          Authorization: `Basic ${Buffer.from(
-            `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`,
-            "utf-8"
-          ).toString("base64")}`,
-        },
-      }
-    )
-    .then(async (response) => {
-      await getUserDetails(response.data.access_token);
-      res.send(response.data);
-    })
-    .catch((error) => {
-      res.send(error);
-      console.log(error);
-    });
+  if (!refreshToken) {
+    return res.status(200).send("no token");
+  } else {
+    axios
+      .post(
+        "https://accounts.spotify.com/api/token",
+        querystring.stringify({
+          grant_type: "refresh_token",
+          refresh_token: refreshToken,
+        }),
+        {
+          headers: {
+            "content-type": "application/x-www-form-urlencoded",
+            Authorization: `Basic ${Buffer.from(
+              `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`,
+              "utf-8"
+            ).toString("base64")}`,
+          },
+        }
+      )
+      .then(async (response) => {
+        await getUserDetails(response.data.access_token);
+        return res.send(response.data);
+      })
+      .catch((error) => {
+        return res.send(error);
+        console.log(error);
+      });
+  }
 });
 
 app.get("/allPlaylists", async (req: any, res) => {
@@ -193,7 +197,7 @@ app.get("/playlist", async (req: any, res) => {
     res.send(songs);
   } catch (e) {
     console.log(e);
-    res.sendStatus(500);
+    res.sendStatus(e.response.status);
   }
 });
 

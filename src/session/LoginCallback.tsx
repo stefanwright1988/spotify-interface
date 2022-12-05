@@ -45,14 +45,6 @@ const LoginCallback = () => {
     const { data, isLoading, isFetching, isSuccess } =
       useCallbackQuery(accessCode);
 
-    if (isFetching || isLoading) {
-      return (
-        <div>
-          <FaSpinner />
-          <p>Logging you in...</p>
-        </div>
-      );
-    }
     if (isSuccess) {
       dispatch(setSpotifyAccessCode(data.access_token));
       dispatch(setSpotifyRefreshCode(data.refresh_token));
@@ -60,6 +52,15 @@ const LoginCallback = () => {
         setSpotifyExpiresAt(Date.now() + data.expires_in * 1000 - 10000)
       );
       window.history.pushState({}, "", "/");
+    }
+
+    if (isFetching || isLoading) {
+      return (
+        <div>
+          <FaSpinner />
+          <p>Logging you in...</p>
+        </div>
+      );
     }
   }
   return (
