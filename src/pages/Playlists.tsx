@@ -5,9 +5,12 @@ import { GiMusicalNotes } from "react-icons/gi";
 import { FaPlay, FaPlayCircle } from "react-icons/fa";
 import { CgPlayButtonO } from "react-icons/cg";
 import Spinner from "../components/Spinner";
+import { useAllPlaylistsQuery } from "../redux/api/spotify";
 
 const Playlists = () => {
   const playlistsState = useAppSelector((state: any) => state.playlists);
+
+  const { data: hello } = useAllPlaylistsQuery();
 
   if (playlistsState.playlistsFetchState === "loading") {
     return <Spinner />;

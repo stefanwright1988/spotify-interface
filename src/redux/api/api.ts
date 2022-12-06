@@ -7,9 +7,12 @@ import { RootState } from "../store";
 const baseQuery = fetchBaseQuery({
   baseUrl: "http://localhost:5001/spotify-react-ts-vite/us-central1/app/",
   prepareHeaders: (headers, { getState }) => {
-    const token = (getState() as RootState).spotify.spotify_refresh_code;
-    if (token) {
-      headers.set("rtkAuthToken", `${token}`);
+    const { spotify_access_code, spotify_refresh_code } = (
+      getState() as RootState
+    ).spotify;
+    if (spotify_access_code) {
+      headers.set("rtkaccesstoken", `${spotify_access_code}`);
+      headers.set("rtkrefreshtoken", `${spotify_refresh_code}`);
     }
     return headers;
   },
@@ -62,10 +65,4 @@ export const api = createApi({
    * If you want all endpoints defined in the same file, they could be included here instead
    */
   endpoints: () => ({}),
-});
-
-export const enhancedApi = api.enhanceEndpoints({
-  endpoints: () => ({
-    getPost: () => "test",
-  }),
 });

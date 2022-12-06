@@ -97,7 +97,7 @@ app.post("/callback", (req: any, res) => {
 });
 
 app.get("/refresh_token", (req: any, res: any) => {
-  const refreshToken = req.headers["rtkauthtoken"];
+  const refreshToken = req.headers["rtkrefreshtoken"];
 
   if (!refreshToken) {
     return res.status(200).send("no token");
@@ -131,7 +131,7 @@ app.get("/refresh_token", (req: any, res: any) => {
 });
 
 app.get("/allPlaylists", async (req: any, res) => {
-  const { accessToken } = req.query;
+  const accessToken = req.headers["rtkaccesstoken"];
   console.log(req.headers);
   try {
     const playlists = await getAllPlaylists(accessToken);
@@ -249,6 +249,12 @@ const getAllPlaylistSongs = async (accessToken, playlistId) => {
   retVal.tracks.items = retSongs;
   return retVal;
 };
+
+app.get("/getUser", async (req: any, res: any) => {
+  const accessToken = req.headers["rtkaccesstoken"];
+  const user = await getUserDetails(accessToken);
+  res.send(user);
+});
 
 const getUserDetails = async (accessToken): Promise<any> => {
   let retVal = {};

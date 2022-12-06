@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { api } from "../api/api";
-import { authApi } from "../api/auth";
+import { spotifyApi } from "../api/spotify";
 
 const spotifySlice = createSlice({
   name: "spotify",
@@ -22,20 +22,26 @@ const spotifySlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addMatcher(authApi.endpoints.callback.matchPending, (state, action) => {
-        console.log("pending", action);
-      })
       .addMatcher(
-        authApi.endpoints.callback.matchFulfilled,
+        spotifyApi.endpoints.callback.matchPending,
         (state, action) => {
-          console.log("fulfilled", action);
-          state.spotify_access_code = action.payload.access_token;
-          state.spotify_refresh_code = action.payload.refresh_token;
+          console.log("pending", action);
         }
       )
-      .addMatcher(authApi.endpoints.callback.matchRejected, (state, action) => {
-        console.log("rejected", action);
-      });
+      .addMatcher(
+        spotifyApi.endpoints.callback.matchFulfilled,
+        (state, action) => {
+          state.spotify_access_code = action.payload.access_token;
+          state.spotify_refresh_code = action.payload.refresh_token;
+          window.history.pushState({}, "", "/");
+        }
+      )
+      .addMatcher(
+        spotifyApi.endpoints.callback.matchRejected,
+        (state, action) => {
+          console.log("rejected", action);
+        }
+      );
   },
 });
 

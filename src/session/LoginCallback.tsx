@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import spotifySlice from "../redux/slices/spotifyAuth";
 import { useAppDispatch } from "../hooks/reduxHooks";
-import { useCallbackQuery } from "../redux/api/auth";
+import { useCallbackQuery } from "../redux/api/spotify";
 
 const LoginCallback = () => {
   const dispatch = useAppDispatch();
@@ -44,15 +44,6 @@ const LoginCallback = () => {
   if (accessCode != null) {
     const { data, isLoading, isFetching, isSuccess } =
       useCallbackQuery(accessCode);
-
-    if (isSuccess) {
-      dispatch(setSpotifyAccessCode(data.access_token));
-      dispatch(setSpotifyRefreshCode(data.refresh_token));
-      dispatch(
-        setSpotifyExpiresAt(Date.now() + data.expires_in * 1000 - 10000)
-      );
-      window.history.pushState({}, "", "/");
-    }
 
     if (isFetching || isLoading) {
       return (
