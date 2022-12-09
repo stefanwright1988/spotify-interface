@@ -46,3 +46,9 @@ const spotifySlice = createSlice({
 });
 
 export default spotifySlice;
+
+export const {
+  setSpotifyAccessCode,
+  setSpotifyExpiresAt,
+  setSpotifyRefreshCode,
+} = spotifySlice.actions;

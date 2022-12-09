@@ -20,7 +20,7 @@ import axios from "axios";
 import spotifySlice from "./redux/slices/spotifyAuth";
 import { useAppDispatch, useAppSelector } from "./hooks/reduxHooks";
 import { fetchAllPlaylists } from "./redux/slices/spotifyPlaylists";
-import { useTestQuery } from "./redux/api/spotify";
+import { spotifyApi, useTestQuery } from "./redux/api/spotify";
 import { useAllPlaylistsQuery } from "./redux/api/spotify";
 import UserMiddleware from "./middleware/UserMiddleware";
 
@@ -33,23 +33,9 @@ function App() {
   const { screenWidth, navActive } = useAppSelector((state: any) => state.app);
   const { spotify_access_code, spotify_refresh_code, spotify_token_expiresAt } =
     useAppSelector((state: any) => state.spotify);
-
-  //const { data, status, error, refetch } = useTestQuery("hi");
-
-  if (spotify_refresh_code) {
-    /* const { data, status, error, refetch } = useReauthQuery(
-      spotify_refresh_code,
-      {
-        pollingInterval: 1800000,
-      }
-    ); */
-    /* if (data) {
-      dispatch(setSpotifyAccessCode(data.access_token));
-      dispatch(
-        setSpotifyExpiresAt(Date.now() + data.expires_in * 1000 - 10000)
-      );
-    } */
-  }
+  spotifyApi.endpoints.getUser.useQuery(null, {
+    skip: !spotify_refresh_code,
+  });
 
   /* useEffect(() => {
     if (spotify_refresh_code) {
@@ -103,12 +89,18 @@ function App() {
       return () => clearInterval(timeout);
     }
   }, [spotify_refresh_code, spotify_access_code]); */
-
-  useEffect(() => {
-    if (spotify_access_code) {
-    }
-  }, [dispatch, spotify_access_code]);
   //We are logged in!
+  if (!spotify_access_code) {
+    return (
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Default />}>
+            <Route path="/loginCallback" element={<LoginCallback />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    );
+  }
   return (
     <BrowserRouter>
       <UserMiddleware>
@@ -123,16 +115,7 @@ function App() {
             <Route path="albums" element={<Albums />} />
             <Route path="album" element={<Album />} />
             <Route path="me" element={<Me />} />
-            <Route
-              path="loginCallback"
-              element={
-                spotify_access_code ? (
-                  <Navigate replace to="/" />
-                ) : (
-                  <LoginCallback />
-                )
-              }
-            />
+            <Route path="loginCallback" element={<Navigate replace to="/" />} />
           </Route>
         </Routes>
       </UserMiddleware>

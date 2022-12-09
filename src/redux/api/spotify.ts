@@ -12,6 +12,11 @@ export const spotifyApi = api.injectEndpoints({
         body: bodyContent,
       }),
     }),
+    refreshUser: build.query<any, any>({
+      query: () => {
+        url: "refresh_token";
+      },
+    }),
     getUser: build.query<any, any>({
       query: () => ({
         url: "getUser",

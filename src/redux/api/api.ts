@@ -1,7 +1,20 @@
-import { createApi, fetchBaseQuery, retry } from "@reduxjs/toolkit/query/react";
-import appSlice from "../slices/globalApp";
-import spotifySlice from "../slices/spotifyAuth";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "../store";
+
+import type {
+  BaseQueryFn,
+  FetchArgs,
+  FetchBaseQueryError,
+} from "@reduxjs/toolkit/query";
+import {
+  setSpotifyAccessCode,
+  setSpotifyRefreshCode,
+  setSpotifyExpiresAt,
+} from "../slices/spotifyAuth";
+import { Mutex } from "async-mutex";
+
+// create a new mutex
+const mutex = new Mutex();
 
 // Create our baseQuery instance
 const baseQuery = fetchBaseQuery({
@@ -10,35 +23,46 @@ const baseQuery = fetchBaseQuery({
     const { spotify_access_code, spotify_refresh_code } = (
       getState() as RootState
     ).spotify;
-    if (spotify_access_code) {
-      headers.set("rtkaccesstoken", `${spotify_access_code}`);
-      headers.set("rtkrefreshtoken", `${spotify_refresh_code}`);
-    }
+    headers.set("rtkaccesstoken", `${spotify_access_code}`);
+    headers.set("rtkrefreshtoken", `${spotify_refresh_code}`);
     return headers;
   },
 });
-
-const baseQueryWithReauth = async (args, api, extraOptions) => {
+const baseQueryWithReauth: BaseQueryFn<
+  string | FetchArgs,
+  unknown,
+  FetchBaseQueryError
+> = async (args, api, extraOptions) => {
+  // wait until the mutex is available without locking it
+  await mutex.waitForUnlock();
   let result = await baseQuery(args, api, extraOptions);
-  console.log(result);
-  if (result?.error?.originalStatus === 200) {
-    console.log("sending refresh token");
-    // send refresh token to get new access token
-    const refreshResult = await baseQuery("/refresh_token", api, extraOptions);
-    console.log(refreshResult);
-    if (refreshResult?.data) {
-      spotifySlice.actions.setSpotifyAccessCode(
-        refreshResult.data.access_token
-      );
-      spotifySlice.actions.setSpotifyRefreshCode(
-        refreshResult.data.refresh_token
-      );
-      result = await baseQuery(args, api, extraOptions);
+  if (result.error && result.error.status === 401) {
+    // checking whether the mutex is locked
+    if (!mutex.isLocked()) {
+      const release = await mutex.acquire();
+      try {
+        const refreshResult = await baseQuery(
+          "/refresh_token",
+          api,
+          extraOptions
+        );
+        if (refreshResult.data) {
+          api.dispatch(setSpotifyAccessCode(refreshResult.data.access_token));
+          // retry the initial query
+          result = await baseQuery(args, api, extraOptions);
+        } else {
+          //api.dispatch(loggedOut());
+        }
+      } finally {
+        // release must be called once the mutex should be released again.
+        release();
+      }
     } else {
-      //api.dispatch(logOut());
+      // wait until the mutex is available without locking it
+      await mutex.waitForUnlock();
+      result = await baseQuery(args, api, extraOptions);
     }
   }
-
   return result;
 };
 

@@ -252,8 +252,13 @@ const getAllPlaylistSongs = async (accessToken, playlistId) => {
 
 app.get("/getUser", async (req: any, res: any) => {
   const accessToken = req.headers["rtkaccesstoken"];
+  if (!accessToken) {
+    return res
+      .status(401)
+      .send({ message: "No Access Header Value", status: 401 });
+  }
   const user = await getUserDetails(accessToken);
-  res.send(user);
+  return res.send(user);
 });
 
 const getUserDetails = async (accessToken): Promise<any> => {
