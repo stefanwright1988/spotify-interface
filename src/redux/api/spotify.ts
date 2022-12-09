@@ -27,7 +27,7 @@ export const spotifyApi = api.injectEndpoints({
         url: "allPlaylists",
       }),
       providesTags: (result = []) => [
-        ...result.map(({ id }) => ({ type: "Playlists", id } as const)),
+        ...result.items.map(({ id }) => ({ type: "Playlists", id } as const)),
         { type: "Playlists" as const, id: "LIST" },
       ],
     }),
