@@ -1,3 +1,4 @@
+import { IPlaylist } from "../../types/playlistTypes";
 import { api } from "./api";
 
 export const spotifyApi = api.injectEndpoints({
@@ -12,11 +13,6 @@ export const spotifyApi = api.injectEndpoints({
         body: bodyContent,
       }),
     }),
-    refreshUser: build.query<any, any>({
-      query: () => {
-        url: "refresh_token";
-      },
-    }),
     getUser: build.query<any, any>({
       query: () => ({
         url: "getUser",
@@ -26,10 +22,12 @@ export const spotifyApi = api.injectEndpoints({
       query: () => ({
         url: "allPlaylists",
       }),
-      providesTags: (result = []) => [
-        ...result.items.map(({ id }) => ({ type: "Playlists", id } as const)),
-        { type: "Playlists" as const, id: "LIST" },
-      ],
+    }),
+    singlePlaylist: build.query<IPlaylist, any>({
+      query: (playlistId) => ({
+        url: "playlist",
+        params: { playlistId: playlistId },
+      }),
     }),
     test: build.query({
       query: () => ({
@@ -43,6 +41,7 @@ export const {
   useCallbackQuery,
   useTestQuery,
   useAllPlaylistsQuery,
+  useSinglePlaylistQuery,
   useGetUserQuery,
 } = spotifyApi;
 

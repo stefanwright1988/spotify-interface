@@ -13,7 +13,7 @@ const PlaylistsList = () => {
     isSuccess,
   } = useAllPlaylistsQuery();
 
-  if (isFetching || isLoading) {
+  if (isLoading) {
     return <Spinner />;
   }
 

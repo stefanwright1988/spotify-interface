@@ -5,18 +5,12 @@ import { GiMusicalNotes } from "react-icons/gi";
 import { FaPlay, FaPlayCircle } from "react-icons/fa";
 import { CgPlayButtonO } from "react-icons/cg";
 import Spinner from "../components/Spinner";
-import { useAllPlaylistsQuery } from "../redux/api/spotify";
+import { spotifyApi, useAllPlaylistsQuery } from "../redux/api/spotify";
 
 const Playlists = () => {
-  const {
-    data: playlists,
-    isError,
-    isFetching,
-    isLoading,
-    isSuccess,
-  } = useAllPlaylistsQuery();
+  const { data: playlists, isError, isLoading } = useAllPlaylistsQuery();
 
-  if (isFetching || isLoading) {
+  if (isLoading) {
     return <Spinner />;
   }
 

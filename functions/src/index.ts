@@ -191,7 +191,8 @@ const getAllPlaylists = async (accessToken) => {
 };
 
 app.get("/playlist", async (req: any, res) => {
-  const { accessToken, playlistId } = req.query;
+  const accessToken = req.headers["rtkaccesstoken"];
+  const { playlistId } = req.query;
   try {
     const songs = await getAllPlaylistSongs(accessToken, playlistId);
     res.send(songs);
