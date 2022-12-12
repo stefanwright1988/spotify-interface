@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import {
   Dashboard,
@@ -13,29 +12,14 @@ import {
   Default,
 } from "./pages";
 import "./app.css";
-import { useSelector } from "react-redux";
-import appSlice from "./redux/slices/globalApp";
 import LoginCallback from "./session/LoginCallback";
-import axios from "axios";
-import spotifySlice from "./redux/slices/spotifyAuth";
-import { useAppDispatch, useAppSelector } from "./hooks/reduxHooks";
-import { fetchAllPlaylists } from "./redux/slices/spotifyPlaylists";
-import { spotifyApi, useTestQuery } from "./redux/api/spotify";
-import { useAllPlaylistsQuery } from "./redux/api/spotify";
+import { useAppSelector } from "./hooks/reduxHooks";
 import UserMiddleware from "./middleware/UserMiddleware";
 
 function App() {
   //Redux
-  const dispatch = useAppDispatch();
-  const { setScreenWidth, setNavActive } = appSlice.actions;
-  const { setSpotifyAccessCode, setSpotifyExpiresAt, setSpotifyRefreshCode } =
-    spotifySlice.actions;
-  const { screenWidth, navActive } = useAppSelector((state: any) => state.app);
   const { spotify_access_code, spotify_refresh_code, spotify_token_expiresAt } =
     useAppSelector((state: any) => state.spotify);
-  spotifyApi.endpoints.getUser.useQuery(null, {
-    skip: !spotify_refresh_code,
-  });
 
   /* useEffect(() => {
     if (spotify_refresh_code) {
@@ -89,15 +73,17 @@ function App() {
       return () => clearInterval(timeout);
     }
   }, [spotify_refresh_code, spotify_access_code]); */
-  //We are logged in!
-  if (!spotify_access_code) {
+
+  if (!spotify_access_code || spotify_access_code === "") {
     return (
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Default />}>
-            <Route path="/loginCallback" element={<LoginCallback />} />
-          </Route>
-        </Routes>
+        <UserMiddleware>
+          <Routes>
+            <Route path="/" element={<Default />}>
+              <Route path="/loginCallback" element={<LoginCallback />} />
+            </Route>
+          </Routes>
+        </UserMiddleware>
       </BrowserRouter>
     );
   }

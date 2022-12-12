@@ -11,10 +11,15 @@ interface Props {
 }
 
 const UserMiddleware: FC<Props> = ({ children }) => {
-  const accessToken = useTypedSelector(
-    (state: RootState) => state.spotify.spotify_access_code
-  );
+  const {
+    spotify_access_code: accessToken,
+    spotify_refresh_code: refreshToken,
+  } = useTypedSelector((state: RootState) => state.spotify);
   const user = useAuthUser();
+
+  spotifyApi.endpoints.refreshToken.useQuery(null, {
+    skip: (!accessToken && !refreshToken) || !refreshToken,
+  });
 
   spotifyApi.endpoints.getUser.useQuery(null, {
     skip: !accessToken,
@@ -25,7 +30,11 @@ const UserMiddleware: FC<Props> = ({ children }) => {
     skip: !accessToken,
   });
 
-  if (!user && accessToken) {
+  if (!accessToken && !refreshToken) {
+    return children as React.ReactElement;
+  }
+
+  if (!user && (!accessToken || accessToken == "")) {
     return <Spinner />;
   }
 

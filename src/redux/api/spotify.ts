@@ -13,6 +13,11 @@ export const spotifyApi = api.injectEndpoints({
         body: bodyContent,
       }),
     }),
+    refreshToken: build.query<any, any>({
+      query: () => ({
+        url: "refresh_token",
+      }),
+    }),
     getUser: build.query<any, any>({
       query: () => ({
         url: "getUser",
@@ -39,6 +44,7 @@ export const spotifyApi = api.injectEndpoints({
 
 export const {
   useCallbackQuery,
+  useRefreshTokenQuery,
   useTestQuery,
   useAllPlaylistsQuery,
   useSinglePlaylistQuery,
