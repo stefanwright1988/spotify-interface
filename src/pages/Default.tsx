@@ -1,13 +1,9 @@
-import React from "react";
-import { useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 import { Navbar, Sidebar } from "../components";
 import Playback from "../components/Playback";
 import { useAppSelector } from "../hooks/reduxHooks";
 
 const Default = () => {
-  const { navActive } = useAppSelector((state: any) => state.app);
-
   return (
     <>
       <div className="max-w-full w-full h-screen overflow:auto xl:overflow-hidden bg-slate-800">

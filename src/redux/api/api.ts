@@ -6,11 +6,7 @@ import type {
   FetchArgs,
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query";
-import {
-  setSpotifyAccessCode,
-  setSpotifyRefreshCode,
-  setSpotifyExpiresAt,
-} from "../slices/spotifyAuth";
+import { setSpotifyAccessCode } from "../slices/spotifyAuth";
 import { Mutex } from "async-mutex";
 
 // create a new mutex

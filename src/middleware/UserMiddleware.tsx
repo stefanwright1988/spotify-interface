@@ -26,7 +26,7 @@ const UserMiddleware: FC<Props> = ({ children }) => {
   });
 
   spotifyApi.endpoints.allPlaylists.useQuery(undefined, {
-    pollingInterval: 30000,
+    pollingInterval: 300000,
     skip: !accessToken,
   });
 
@@ -34,7 +34,7 @@ const UserMiddleware: FC<Props> = ({ children }) => {
     return children as React.ReactElement;
   }
 
-  if (!user && (!accessToken || accessToken == "")) {
+  if (!user && !accessToken) {
     return <Spinner />;
   }
 

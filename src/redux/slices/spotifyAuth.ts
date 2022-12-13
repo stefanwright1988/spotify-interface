@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { api } from "../api/api";
 import { spotifyApi } from "../api/spotify";
 
 type TInitialState = {

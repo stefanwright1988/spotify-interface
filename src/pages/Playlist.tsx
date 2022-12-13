@@ -1,12 +1,8 @@
-import React, { useEffect } from "react";
 import { FaPlayCircle, FaRegClock } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import { convertMsToTime, formatUTCDateToISO } from "../helpers/datetime";
-import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 import { useSinglePlaylistQuery } from "../redux/api/spotify";
-import { fetchPlaylist } from "../redux/slices/spotifyPlaylists";
-import { IPlaylist } from "../types/playlistTypes";
 
 const Playlist = () => {
   const params = useParams();
@@ -14,9 +10,10 @@ const Playlist = () => {
     data: playlist,
     isError,
     isLoading,
+    isFetching,
   } = useSinglePlaylistQuery(params.playlistId);
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return <Spinner />;
   }
 
