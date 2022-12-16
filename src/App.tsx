@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import {
   Dashboard,
@@ -13,25 +12,16 @@ import {
   Default,
 } from "./pages";
 import "./app.css";
-import { useSelector } from "react-redux";
-import appSlice from "./redux/slices/globalApp";
 import LoginCallback from "./session/LoginCallback";
-import axios from "axios";
-import spotifySlice from "./redux/slices/spotifyAuth";
-import { useAppDispatch, useAppSelector } from "./hooks/reduxHooks";
-import { fetchAllPlaylists } from "./redux/slices/spotifyPlaylists";
+import { useAppSelector } from "./hooks/reduxHooks";
+import UserMiddleware from "./middleware/UserMiddleware";
 
 function App() {
   //Redux
-  const dispatch = useAppDispatch();
-  const { setScreenWidth, setNavActive } = appSlice.actions;
-  const { setSpotifyAccessCode, setSpotifyExpiresAt, setSpotifyRefreshCode } =
-    spotifySlice.actions;
-  const { screenWidth, navActive } = useAppSelector((state: any) => state.app);
   const { spotify_access_code, spotify_refresh_code, spotify_token_expiresAt } =
     useAppSelector((state: any) => state.spotify);
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (spotify_refresh_code) {
       const controller: AbortController = new AbortController();
       const signal: AbortSignal = controller.signal;
@@ -82,62 +72,39 @@ function App() {
 
       return () => clearInterval(timeout);
     }
-  }, [spotify_refresh_code, spotify_access_code]);
-
-  useEffect(() => {
-    if (spotify_access_code) {
-      const abortCtrl = new AbortController();
-      const opts = { signal: abortCtrl.signal };
-      dispatch(
-        fetchAllPlaylists({
-          apiUrl: `http://localhost:5001/spotify-react-ts-vite/us-central1/app/allPlaylists?accessToken=${spotify_access_code}`,
-          opts: opts,
-        })
-      );
-      return () => {
-        abortCtrl.abort();
-      };
-    }
-  }, [dispatch, spotify_access_code]);
+  }, [spotify_refresh_code, spotify_access_code]); */
 
   if (!spotify_access_code || spotify_access_code === "") {
     return (
-      <div className="flex h-full">
-        <BrowserRouter>
+      <BrowserRouter>
+        <UserMiddleware>
           <Routes>
             <Route path="/" element={<Default />}>
-              <Route
-                index
-                element={
-                  <>
-                    <p>Not signed in</p>
-                  </>
-                }
-              />
               <Route path="/loginCallback" element={<LoginCallback />} />
             </Route>
           </Routes>
-        </BrowserRouter>
-      </div>
+        </UserMiddleware>
+      </BrowserRouter>
     );
   }
-  //We are logged in!
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Default />}>
-          <Route index element={<Dashboard />} />
-          <Route path="search" element={<Search />} />
-          <Route path="playlists" element={<Playlists />} />
-          <Route path="playlist/:playlistId" element={<Playlist />} />
-          <Route path="artists" element={<Artists />} />
-          <Route path="artist" element={<Artist />} />
-          <Route path="albums" element={<Albums />} />
-          <Route path="album" element={<Album />} />
-          <Route path="me" element={<Me />} />
-          <Route path="loginCallback" element={<Navigate replace to="/" />} />
-        </Route>
-      </Routes>
+      <UserMiddleware>
+        <Routes>
+          <Route path="/" element={<Default />}>
+            <Route index element={<Dashboard />} />
+            <Route path="search" element={<Search />} />
+            <Route path="playlists" element={<Playlists />} />
+            <Route path="playlist/:playlistId" element={<Playlist />} />
+            <Route path="artists" element={<Artists />} />
+            <Route path="artist" element={<Artist />} />
+            <Route path="albums" element={<Albums />} />
+            <Route path="album" element={<Album />} />
+            <Route path="me" element={<Me />} />
+            <Route path="loginCallback" element={<Navigate replace to="/" />} />
+          </Route>
+        </Routes>
+      </UserMiddleware>
     </BrowserRouter>
   );
 }
