@@ -21,7 +21,12 @@ const generateRandomString = (length) => {
 
 const stateKey = "spotify_state_key";
 
+app.get("/hello", (req, res) => {
+  res.status(200).send({ response: "Hello world" });
+});
+
 app.get("/login", (req, res) => {
+  console.log(req.headers);
   const state = generateRandomString(16);
   res.cookie(stateKey, state);
 
@@ -37,14 +42,9 @@ app.get("/login", (req, res) => {
   res.redirect(`https://accounts.spotify.com/authorize?${queryParams}`);
 });
 
-app.get("/callback", (req: any, res) => {
-  const code = req.query.code || null;
+app.post("/callback", (req: any, res) => {
+  const code = req.body || null;
   let retVal = {};
-  const controller = new AbortController();
-
-  req.on("close", function (err) {
-    controller.abort();
-  });
 
   const options = {
     headers: {
@@ -54,7 +54,6 @@ app.get("/callback", (req: any, res) => {
         "utf-8"
       ).toString("base64")}`,
     },
-    signal: controller.signal,
   };
 
   console.log(`code is: ${code}`);
@@ -97,38 +96,43 @@ app.get("/callback", (req: any, res) => {
     });
 });
 
-app.get("/refresh_token", (req: any, res) => {
-  const { refreshToken } = req.query;
+app.get("/refresh_token", (req: any, res: any) => {
+  const refreshToken = req.headers["rtkrefreshtoken"];
 
-  axios
-    .post(
-      "https://accounts.spotify.com/api/token",
-      querystring.stringify({
-        grant_type: "refresh_token",
-        refresh_token: refreshToken,
-      }),
-      {
-        headers: {
-          "content-type": "application/x-www-form-urlencoded",
-          Authorization: `Basic ${Buffer.from(
-            `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`,
-            "utf-8"
-          ).toString("base64")}`,
-        },
-      }
-    )
-    .then(async (response) => {
-      await getUserDetails(response.data.access_token);
-      res.send(response.data);
-    })
-    .catch((error) => {
-      res.send(error);
-      console.log(error);
-    });
+  if (!refreshToken) {
+    return res.status(200).send("no token");
+  } else {
+    axios
+      .post(
+        "https://accounts.spotify.com/api/token",
+        querystring.stringify({
+          grant_type: "refresh_token",
+          refresh_token: refreshToken,
+        }),
+        {
+          headers: {
+            "content-type": "application/x-www-form-urlencoded",
+            Authorization: `Basic ${Buffer.from(
+              `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`,
+              "utf-8"
+            ).toString("base64")}`,
+          },
+        }
+      )
+      .then(async (response) => {
+        await getUserDetails(response.data.access_token);
+        return res.send(response.data);
+      })
+      .catch((error) => {
+        return res.send(error);
+        console.log(error);
+      });
+  }
 });
 
 app.get("/allPlaylists", async (req: any, res) => {
-  const { accessToken } = req.query;
+  const accessToken = req.headers["rtkaccesstoken"];
+  console.log(req.headers);
   try {
     const playlists = await getAllPlaylists(accessToken);
     res.send(playlists);
@@ -187,13 +191,14 @@ const getAllPlaylists = async (accessToken) => {
 };
 
 app.get("/playlist", async (req: any, res) => {
-  const { accessToken, playlistId } = req.query;
+  const accessToken = req.headers["rtkaccesstoken"];
+  const { playlistId } = req.query;
   try {
     const songs = await getAllPlaylistSongs(accessToken, playlistId);
     res.send(songs);
   } catch (e) {
     console.log(e);
-    res.sendStatus(500);
+    res.sendStatus(e.response.status);
   }
 });
 
@@ -245,6 +250,17 @@ const getAllPlaylistSongs = async (accessToken, playlistId) => {
   retVal.tracks.items = retSongs;
   return retVal;
 };
+
+app.get("/getUser", async (req: any, res: any) => {
+  const accessToken = req.headers["rtkaccesstoken"];
+  if (!accessToken) {
+    return res
+      .status(401)
+      .send({ message: "No Access Header Value", status: 401 });
+  }
+  const user = await getUserDetails(accessToken);
+  return res.send(user);
+});
 
 const getUserDetails = async (accessToken): Promise<any> => {
   let retVal = {};

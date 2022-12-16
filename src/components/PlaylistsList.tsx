@@ -1,17 +1,23 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { useAppSelector } from "../hooks/reduxHooks";
+import { useAllPlaylistsQuery } from "../redux/api/spotify";
 import { IPlaylist } from "../types/playlistTypes";
 import Spinner from "./Spinner";
 
 const PlaylistsList = () => {
-  const playlists = useAppSelector((state: any) => state.playlists);
+  const {
+    data: playlists,
+    isError,
+    isFetching,
+    isLoading,
+    isSuccess,
+  } = useAllPlaylistsQuery();
 
-  if (playlists.playlistsFetchState === "loading") {
+  if (isLoading) {
     return <Spinner />;
   }
 
-  if (playlists.playlistsFetchState === "error") {
+  if (isError) {
     return (
       <div>
         <p>...ERROR LOADING PLAYLISTS</p>
@@ -24,7 +30,7 @@ const PlaylistsList = () => {
 
   return (
     <>
-      {playlists.playlists.items?.map((playlist: IPlaylist, index: number) => {
+      {playlists.items?.map((playlist: IPlaylist, index: number) => {
         return (
           <NavLink
             to={`/playlist/${playlist.id}`}
