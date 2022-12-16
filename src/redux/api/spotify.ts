@@ -1,4 +1,4 @@
-import { IPlaylist } from "../../types/playlistTypes";
+import { IAllPlaylists, IPlaylist } from "../../types/playlistTypes";
 import { api } from "./api";
 
 export const spotifyApi = api.injectEndpoints({
@@ -22,17 +22,20 @@ export const spotifyApi = api.injectEndpoints({
       query: () => ({
         url: "getUser",
       }),
+      providesTags: (result, error, id) => [{ type: "User", id }],
     }),
-    allPlaylists: build.query<any, void>({
+    allPlaylists: build.query<IAllPlaylists, any>({
       query: () => ({
         url: "allPlaylists",
       }),
+      providesTags: (result, error, id) => [{ type: "Playlists", id }],
     }),
     singlePlaylist: build.query<IPlaylist, any>({
       query: (playlistId) => ({
         url: "playlist",
         params: { playlistId: playlistId },
       }),
+      providesTags: (result, error, id) => [{ type: "Playlist", id }],
     }),
     test: build.query({
       query: () => ({
