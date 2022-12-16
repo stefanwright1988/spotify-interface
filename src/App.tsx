@@ -10,6 +10,7 @@ import {
   Search,
   Me,
   Default,
+  Login,
 } from "./pages";
 import "./app.css";
 import LoginCallback from "./session/LoginCallback";
@@ -79,9 +80,8 @@ function App() {
       <BrowserRouter>
         <UserMiddleware>
           <Routes>
-            <Route path="/" element={<Default />}>
-              <Route path="/loginCallback" element={<LoginCallback />} />
-            </Route>
+            <Route path="/" element={<Login />} />
+            <Route path="/loginCallback" element={<LoginCallback />} />
           </Routes>
         </UserMiddleware>
       </BrowserRouter>
