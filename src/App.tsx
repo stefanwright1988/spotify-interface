@@ -22,59 +22,6 @@ function App() {
   const { spotify_access_code, spotify_refresh_code, spotify_token_expiresAt } =
     useAppSelector((state: any) => state.spotify);
 
-  /* useEffect(() => {
-    if (spotify_refresh_code) {
-      const controller: AbortController = new AbortController();
-      const signal: AbortSignal = controller.signal;
-      const performLogin = async () => {
-        await axios
-          .get(
-            `http://localhost:5001/spotify-react-ts-vite/us-central1/app/refresh_token?refreshToken=${spotify_refresh_code}`,
-            { signal: signal }
-          )
-          .then((res) => {
-            dispatch(setSpotifyAccessCode(res.data.access_token));
-            dispatch(
-              setSpotifyExpiresAt(
-                Date.now() + res.data.expires_in * 1000 - 10000
-              )
-            );
-          })
-          .catch((err) => {
-            if (controller.signal.aborted) return;
-            console.log(err);
-          });
-      };
-      performLogin();
-      return () => {
-        controller.abort();
-      };
-    }
-  }, []);
-
-  useEffect(() => {
-    if (spotify_access_code) {
-      const timeout = setInterval(() => {
-        if (Date.now() > spotify_token_expiresAt - 30000) {
-          axios
-            .get(
-              `http://localhost:5001/spotify-react-ts-vite/us-central1/app/refresh_token?refreshToken=${spotify_refresh_code}`
-            )
-            .then((res) => {
-              dispatch(setSpotifyAccessCode(res.data.access_token));
-              dispatch(
-                setSpotifyExpiresAt(
-                  Date.now() + res.data.expires_in * 1000 - 10000
-                )
-              );
-            });
-        }
-      }, 10000);
-
-      return () => clearInterval(timeout);
-    }
-  }, [spotify_refresh_code, spotify_access_code]); */
-
   if (!spotify_access_code || spotify_access_code === "") {
     return (
       <BrowserRouter>

@@ -1,15 +1,6 @@
 const Dashboard = () => {
   return (
-    <div className="h-full bg-slate-300">
-      <div className="pt-14 flex flex-wrap lg:flex-nowrap justify-center">
-        <div className="bg-secondary-dark-bg h-44 rounded-xl w-11/12 p-8 pt-9 m-3">
-          News
-        </div>
-      </div>
-      <div className="flex justify-center my-2">
-        <h1 className="text-2xl w-11/12">Welcome {`{Stefan}`}</h1>
-      </div>
-
+    <div className="h-full">
       <div className="flex justify-center">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-11/12">
           {[1, 2, 3, 4, 5, 6].map((recent, index) => {

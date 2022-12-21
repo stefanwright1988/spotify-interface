@@ -26,7 +26,6 @@ app.get("/hello", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  console.log(req.headers);
   const state = generateRandomString(16);
   res.cookie(stateKey, state);
 
@@ -132,7 +131,6 @@ app.get("/refresh_token", (req: any, res: any) => {
 
 app.get("/allPlaylists", async (req: any, res) => {
   const accessToken = req.headers["rtkaccesstoken"];
-  console.log(req.headers);
   try {
     const playlists = await getAllPlaylists(accessToken);
     res.send(playlists);
@@ -271,7 +269,7 @@ const getUserDetails = async (accessToken): Promise<any> => {
       },
     })
     .then((response) => {
-      retVal = { ...retVal, ...response.data };
+      retVal = response.data;
     })
     .catch((error) => {
       if (error.response) {
@@ -292,6 +290,35 @@ const getUserDetails = async (accessToken): Promise<any> => {
         console.log("Error", error.message);
         retVal = { error: error.message };
       }
+    });
+  return retVal;
+};
+
+app.get("/recentlyPlayed", async (req: any, res: any) => {
+  const accessToken = req.headers["rtkaccesstoken"];
+  const { playedAfter } = req.query;
+  if (!accessToken) {
+    return res
+      .status(401)
+      .send({ message: "No Access Header Value", status: 401 });
+  }
+  const recentlyPlayed = await getRecentlyPlayed(accessToken, playedAfter);
+  return res.send(recentlyPlayed);
+});
+
+const getRecentlyPlayed = async (accessToken, playedAfter): Promise<any> => {
+  let retVal = {};
+  await axios
+    .get(
+      `https://api.spotify.com/v1/me/player/recently-played?after=${playedAfter}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    )
+    .then((response) => {
+      retVal = response.data;
     });
   return retVal;
 };

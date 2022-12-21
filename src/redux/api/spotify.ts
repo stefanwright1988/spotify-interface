@@ -13,22 +13,22 @@ export const spotifyApi = api.injectEndpoints({
         body: bodyContent,
       }),
     }),
-    refreshToken: build.query<any, any>({
+    refreshToken: build.query<any, void | null>({
       query: () => ({
         url: "refresh_token",
       }),
     }),
-    getUser: build.query<any, any>({
+    getUser: build.query<any, void | null>({
       query: () => ({
         url: "getUser",
       }),
-      providesTags: (result, error, id) => [{ type: "User", id }],
+      providesTags: (result, error, id) => ["User"],
     }),
-    allPlaylists: build.query<IAllPlaylists, any>({
+    allPlaylists: build.query<IAllPlaylists, void | null>({
       query: () => ({
         url: "allPlaylists",
       }),
-      providesTags: (result, error, id) => [{ type: "Playlists", id }],
+      providesTags: (result, error, id) => ["Playlists"],
     }),
     singlePlaylist: build.query<IPlaylist, any>({
       query: (playlistId) => ({
@@ -36,6 +36,12 @@ export const spotifyApi = api.injectEndpoints({
         params: { playlistId: playlistId },
       }),
       providesTags: (result, error, id) => [{ type: "Playlist", id }],
+    }),
+    recentlyPlayed: build.query<IPlaylist, any>({
+      query: (dateMinusSeven) => ({
+        url: "recentlyPlayed",
+        params: { playedAfter: dateMinusSeven },
+      }),
     }),
     test: build.query({
       query: () => ({
@@ -52,6 +58,7 @@ export const {
   useAllPlaylistsQuery,
   useSinglePlaylistQuery,
   useGetUserQuery,
+  useRecentlyPlayedQuery,
 } = spotifyApi;
 
 export const {
