@@ -30,8 +30,11 @@ const UserMiddleware: FC<Props> = ({ children }) => {
     skip: !accessToken,
   });
 
-  const tsMinusSeven = Date.now() - 604800;
-  spotifyApi.endpoints.recentlyPlayed.useQuery(tsMinusSeven, {
+  spotifyApi.endpoints.featuredPlaylists.useQuery(undefined, {
+    skip: !accessToken,
+  });
+
+  spotifyApi.endpoints.categoryPlaylists.useQuery("party", {
     skip: !accessToken,
   });
 

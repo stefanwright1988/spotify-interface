@@ -97,6 +97,7 @@ app.post("/callback", (req: any, res) => {
 
 app.get("/refresh_token", (req: any, res: any) => {
   const refreshToken = req.headers["rtkrefreshtoken"];
+  let retVal = {};
 
   if (!refreshToken) {
     return res.status(200).send("no token");
@@ -123,9 +124,27 @@ app.get("/refresh_token", (req: any, res: any) => {
         return res.send(response.data);
       })
       .catch((error) => {
-        return res.send(error);
-        console.log(error);
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+          retVal = {
+            ...error.response.data,
+            status: error.response.status,
+          };
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request);
+          retVal = { error: error.request };
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error", error.message);
+          retVal = { error: error.message };
+        }
       });
+
+    return retVal;
   }
 });
 
@@ -294,31 +313,93 @@ const getUserDetails = async (accessToken): Promise<any> => {
   return retVal;
 };
 
-app.get("/recentlyPlayed", async (req: any, res: any) => {
+app.get("/featuredPlaylists", async (req: any, res: any) => {
   const accessToken = req.headers["rtkaccesstoken"];
-  const { playedAfter } = req.query;
   if (!accessToken) {
     return res
       .status(401)
       .send({ message: "No Access Header Value", status: 401 });
   }
-  const recentlyPlayed = await getRecentlyPlayed(accessToken, playedAfter);
-  return res.send(recentlyPlayed);
+  const featuredPlaylists = await getRecommendedPlaylists(accessToken);
+  return res.send(featuredPlaylists);
 });
 
-const getRecentlyPlayed = async (accessToken, playedAfter): Promise<any> => {
+const getRecommendedPlaylists = async (accessToken): Promise<any> => {
   let retVal = {};
   await axios
-    .get(
-      `https://api.spotify.com/v1/me/player/recently-played?after=${playedAfter}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    )
+    .get(`https://api.spotify.com/v1/browse/featured-playlists`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
     .then((response) => {
       retVal = response.data;
+    })
+    .catch((error) => {
+      if (error.response) {
+        // Request made and server responded
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        retVal = {
+          ...error.response.data,
+          status: error.response.status,
+        };
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.log(error.request);
+        retVal = { error: error.request };
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+        retVal = { error: error.message };
+      }
+    });
+  return retVal;
+};
+
+app.get("/categoryPlaylists", async (req: any, res: any) => {
+  const accessToken = req.headers["rtkaccesstoken"];
+  const category = req.query;
+  if (!accessToken) {
+    return res
+      .status(401)
+      .send({ message: "No Access Header Value", status: 401 });
+  }
+  const categoryPlaylists = await getCategoryPlaylists(accessToken, category);
+  return res.send(categoryPlaylists);
+});
+
+const getCategoryPlaylists = async (accessToken, category): Promise<any> => {
+  let retVal = {};
+  await axios
+    .get(`https://api.spotify.com/v1/browse/categories/${category}/playlists`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+    .then((response) => {
+      retVal = response.data;
+    })
+    .catch((error) => {
+      if (error.response) {
+        // Request made and server responded
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        retVal = {
+          ...error.response.data,
+          status: error.response.status,
+        };
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.log(error.request);
+        retVal = { error: error.request };
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+        retVal = { error: error.message };
+      }
     });
   return retVal;
 };

@@ -37,10 +37,15 @@ export const spotifyApi = api.injectEndpoints({
       }),
       providesTags: (result, error, id) => [{ type: "Playlist", id }],
     }),
-    recentlyPlayed: build.query<IPlaylist, any>({
-      query: (dateMinusSeven) => ({
-        url: "recentlyPlayed",
-        params: { playedAfter: dateMinusSeven },
+    featuredPlaylists: build.query<any, void | null>({
+      query: () => ({
+        url: "featuredPlaylists",
+      }),
+    }),
+    categoryPlaylists: build.query<IPlaylist, any>({
+      query: (category) => ({
+        url: "categoryPlaylists",
+        params: { category },
       }),
     }),
     test: build.query({
@@ -58,7 +63,8 @@ export const {
   useAllPlaylistsQuery,
   useSinglePlaylistQuery,
   useGetUserQuery,
-  useRecentlyPlayedQuery,
+  useFeaturedPlaylistsQuery,
+  useCategoryPlaylistsQuery,
 } = spotifyApi;
 
 export const {
