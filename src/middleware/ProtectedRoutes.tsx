@@ -4,6 +4,7 @@ import { Navbar, Sidebar } from "../components";
 import Playback from "../components/Playback";
 import { useAuthUser } from "../hooks/useAuthUser";
 import { RootState, useTypedSelector } from "../redux/store";
+import UserMiddleware from "./UserMiddleware";
 
 const ProtectedRoutes = () => {
   const {
@@ -21,7 +22,7 @@ const ProtectedRoutes = () => {
   }
 
   return (
-    <>
+    <UserMiddleware>
       <div className="max-w-full w-full h-screen overflow:auto xl:overflow-hidden bg-slate-800">
         <div className="flex flex-wrap flex-row w-full max-h-[90vh] min-h-[90vh] aside-container">
           <aside
@@ -39,7 +40,7 @@ const ProtectedRoutes = () => {
           <Playback />
         </div>
       </div>
-    </>
+    </UserMiddleware>
   );
 };
 

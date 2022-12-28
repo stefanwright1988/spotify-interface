@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import { IAllPlaylists, IPlaylist } from "../../types/playlistTypes";
 import { api } from "./api";
 
@@ -42,11 +43,46 @@ export const spotifyApi = api.injectEndpoints({
         url: "featuredPlaylists",
       }),
     }),
-    categoryPlaylists: build.query<IPlaylist, any>({
-      query: (category) => ({
-        url: "categoryPlaylists",
+    recentGenrePlaylists: build.query<any, any>({
+      /*       query: (category) => ({
+        url: "recentGenrePlaylists",
         params: { category },
+      }), */
+      queryFn: async (arg, queryApi, extraOptions, baseQuery) => {
+        let argGenres = [...arg.data.genres];
+        var seedGenres = {};
+
+        for (var i = 0; i < 5; i++) {
+          var idx = Math.floor(Math.random() * argGenres.length);
+          const query = await baseQuery("/search");
+          seedGenres[i] = query.data;
+          argGenres.splice(idx, 1);
+        }
+
+        const one = await baseQuery("/search");
+        console.log(one);
+
+        return { data: 1 };
+      },
+    }),
+    getTopArtists: build.query<any, void | null>({
+      query: () => ({
+        url: "getTopArtists",
       }),
+      transformResponse: (response) => {
+        const artists = new Set();
+        const genres = new Set();
+        response.items.map((artist) => {
+          artists.add({ artistName: artist.name, images: artist.images });
+          if (artist.genres.length > 0) {
+            artist.genres.forEach((genre) => genres.add(genre));
+          }
+        });
+        return {
+          artists: Array.from(artists),
+          genres: Array.from(genres),
+        };
+      },
     }),
     test: build.query({
       query: () => ({
@@ -64,7 +100,8 @@ export const {
   useSinglePlaylistQuery,
   useGetUserQuery,
   useFeaturedPlaylistsQuery,
-  useCategoryPlaylistsQuery,
+  useRecentGenrePlaylistsQuery,
+  useGetTopArtistsQuery,
 } = spotifyApi;
 
 export const {

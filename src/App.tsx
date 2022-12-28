@@ -37,24 +37,21 @@ function App() {
   } */
   return (
     <BrowserRouter>
-      <UserMiddleware>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/loginCallback" element={<LoginCallback />} />
-          <Route path="/" element={<ProtectedRoutes />}>
-            <Route index element={<Dashboard />} />
-            <Route path="search" element={<Search />} />
-            <Route path="playlists" element={<Playlists />} />
-            <Route path="playlist/:playlistId" element={<Playlist />} />
-            <Route path="artists" element={<Artists />} />
-            <Route path="artist" element={<Artist />} />
-            <Route path="albums" element={<Albums />} />
-            <Route path="album" element={<Album />} />
-            <Route path="me" element={<Me />} />
-            <Route path="loginCallback" element={<Navigate replace to="/" />} />
-          </Route>
-        </Routes>
-      </UserMiddleware>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/loginCallback" element={<LoginCallback />} />
+        <Route path="/" element={<ProtectedRoutes />}>
+          <Route index element={<Dashboard />} />
+          <Route path="search" element={<Search />} />
+          <Route path="playlists" element={<Playlists />} />
+          <Route path="playlist/:playlistId" element={<Playlist />} />
+          <Route path="artists" element={<Artists />} />
+          <Route path="artist" element={<Artist />} />
+          <Route path="albums" element={<Albums />} />
+          <Route path="album" element={<Album />} />
+          <Route path="me" element={<Me />} />
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 }
