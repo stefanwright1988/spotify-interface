@@ -43,26 +43,21 @@ export const spotifyApi = api.injectEndpoints({
         url: "featuredPlaylists",
       }),
     }),
-    recentGenrePlaylists: build.query<any, any>({
-      /*       query: (category) => ({
-        url: "recentGenrePlaylists",
-        params: { category },
-      }), */
+    recentGenrePlaylists: build.query<any, void | undefined>({
       queryFn: async (arg, queryApi, extraOptions, baseQuery) => {
-        let argGenres = [...arg.data.genres];
+        let argGenres = [...arg.genres];
         var seedGenres = {};
 
         for (var i = 0; i < 5; i++) {
           var idx = Math.floor(Math.random() * argGenres.length);
           const query = await baseQuery("/search");
-          seedGenres[i] = query.data;
+          seedGenres[i] = {};
+          seedGenres[i]["name"] = argGenres[idx];
+          seedGenres[i] = { ...query.data, ...seedGenres[i] };
           argGenres.splice(idx, 1);
         }
-
-        const one = await baseQuery("/search");
-        console.log(one);
-
-        return { data: 1 };
+        console.log(seedGenres);
+        return { data: seedGenres };
       },
     }),
     getTopArtists: build.query<any, void | null>({

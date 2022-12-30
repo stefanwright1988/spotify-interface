@@ -34,16 +34,16 @@ const UserMiddleware: FC<Props> = ({ children }) => {
     skip: !accessToken,
   });
 
+  /* 
   spotifyApi.endpoints.getTopArtists.useQuery(undefined, {
     skip: !accessToken,
   });
-
   spotifyApi.endpoints.recentGenrePlaylists.useQuery(
     spotifyApi.endpoints.getTopArtists.useQueryState(),
     {
       skip: !spotifyApi.endpoints.getTopArtists.useQueryState().isSuccess,
     }
-  );
+  ); */
 
   if (!accessToken && !refreshToken) {
     return children as React.ReactElement;

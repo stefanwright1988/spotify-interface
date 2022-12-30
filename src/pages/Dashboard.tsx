@@ -2,26 +2,56 @@ import { CgPlayButtonO } from "react-icons/cg";
 import { GiMusicalNotes } from "react-icons/gi";
 import { Link } from "react-router-dom";
 import Spinner from "../components/Spinner";
-import { useFeaturedPlaylistsQuery } from "../redux/api/spotify";
+import {
+  spotifyApi,
+  useFeaturedPlaylistsQuery,
+  useGetTopArtistsQuery,
+  useRecentGenrePlaylistsQuery,
+} from "../redux/api/spotify";
+import { RootState, useTypedSelector } from "../redux/store";
 
 const Dashboard = () => {
   const {
-    data: featured,
-    isLoading,
-    isError,
-    isSuccess,
-  } = useFeaturedPlaylistsQuery();
-  if (isLoading) {
+    spotify_access_code: accessToken,
+    spotify_refresh_code: refreshToken,
+  } = useTypedSelector((state: RootState) => state.spotify);
+
+  const {
+    data: featuredData,
+    isLoading: featuredLoading,
+    isError: featuredError,
+    isSuccess: featuredSuccess,
+    isUninitialized: featuredUninitialized,
+  } = useFeaturedPlaylistsQuery(undefined, { skip: !accessToken });
+  const {
+    data: topArtistsData,
+    isLoading: topArtistsLoading,
+    isError: topArtistsError,
+    isSuccess: topArtistsSuccess,
+    isUninitialized: topArtistsUninitialized,
+  } = useGetTopArtistsQuery(undefined, { skip: !accessToken });
+  const {
+    data: recentGenrePlaylistsData,
+    isLoading: recentGenrePlaylistsLoading,
+    isError: recentGenrePlaylistsError,
+    isSuccess: recentGenrePlaylistsSuccess,
+    isUninitialized: recentGenrePlaylistsUninitialized,
+  } = useRecentGenrePlaylistsQuery(topArtistsData, {
+    skip: !accessToken || !topArtistsData,
+  });
+  if (featuredLoading || recentGenrePlaylistsLoading || topArtistsLoading) {
     return <Spinner />;
   }
-  if (isError) {
+  if (featuredError || recentGenrePlaylistsError) {
     return <h1>An error occured</h1>;
   }
-  const playlists = featured.playlists.items;
+
+  const playlists = featuredData.playlists.items;
+  const recentGenrePlaylists = recentGenrePlaylistsData;
   return (
     <div className="h-full">
       <div className="flex flex-col justify-center px-6 ">
-        <h1 className="text-3xl">{featured.message!}</h1>
+        <h1 className="text-3xl">{featuredData.message!}</h1>
 
         <div className="grid grid-cols-[repeat(auto-fit,_minmax(160px,_1fr))] gap-5 py-6">
           {playlists.map((recent, index) => {
