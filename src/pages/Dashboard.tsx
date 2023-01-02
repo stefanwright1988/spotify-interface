@@ -53,12 +53,12 @@ const Dashboard = () => {
       <div className="flex flex-col justify-center px-6 ">
         <h1 className="text-3xl">{featuredData.message!}</h1>
 
-        <div className="scrollable-cards py-6">
+        <div className="grid grid-cols-[repeat(auto-fit,_minmax(160px,_1fr))] gap-5 overflow-y-hidden py-6 grid-rows-1">
           {featuredPlaylists.map((playlist, index) => {
             return (
               <div
                 key={index}
-                className="card flex text-white text-2xl flex-col justify-end p-3 rounded-xl overflow-hidden bg-gray-900 hover:bg-gray-700 group shadow-md shadow-black"
+                className="flex text-white text-2xl flex-col justify-end p-3 rounded-xl overflow-hidden bg-gray-900 hover:bg-gray-700 group shadow-md shadow-black"
               >
                 <div className="relative rounded-3xl overflow-hidden">
                   {/* TODO Fix when no image
@@ -111,13 +111,13 @@ const Dashboard = () => {
                   {recentGenrePlaylists[key]["name"]}
                 </span>
               </h1>
-              <div className="scrollable-cards grid gap-5 py-6">
+              <div className="grid grid-cols-[repeat(auto-fit,_minmax(160px,_1fr))] gap-5 py-6">
                 {recentGenrePlaylists[key]["playlists"].items.map(
                   (recent, index) => {
                     return (
                       <div
                         key={index}
-                        className="card flex text-white text-2xl flex-col justify-end p-3 rounded-xl overflow-hidden bg-gray-900 hover:bg-gray-700 group shadow-md shadow-black"
+                        className="flex text-white text-2xl flex-col justify-end p-3 rounded-xl overflow-hidden bg-gray-900 hover:bg-gray-700 group shadow-md shadow-black"
                       >
                         <div className="relative rounded-3xl overflow-hidden">
                           {/* TODO Fix when no image
