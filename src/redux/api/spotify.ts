@@ -48,15 +48,16 @@ export const spotifyApi = api.injectEndpoints({
         let argGenres = [...arg.genres];
         var seedGenres = {};
 
-        for (var i = 0; i < 5; i++) {
+        for (var i = 0; i < 3; i++) {
           var idx = Math.floor(Math.random() * argGenres.length);
-          const query = await baseQuery("/search");
+          const query = await baseQuery(
+            `/search?query=${argGenres[idx]}&type=playlist&limit=10`
+          );
           seedGenres[i] = {};
           seedGenres[i]["name"] = argGenres[idx];
           seedGenres[i] = { ...query.data, ...seedGenres[i] };
           argGenres.splice(idx, 1);
         }
-        console.log(seedGenres);
         return { data: seedGenres };
       },
     }),

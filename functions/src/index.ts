@@ -372,7 +372,7 @@ app.get("/getTopArtists", async (req: any, res: any) => {
 const getTopArtists = async (accessToken): Promise<any> => {
   let retVal = {};
   await axios
-    .get(`https://api.spotify.com/v1/me/top/artists`, {
+    .get(`https://api.spotify.com/v1/me/top/artists?limit=10`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -405,24 +405,28 @@ const getTopArtists = async (accessToken): Promise<any> => {
 
 app.get("/search", async (req: any, res: any) => {
   const accessToken = req.headers["rtkaccesstoken"];
+  const { query, type, limit } = req.query;
 
   if (!accessToken) {
     return res
       .status(401)
       .send({ message: "No Access Header Value", status: 401 });
   }
-  const topArtists = await search(accessToken);
+  const topArtists = await search(accessToken, query, type, limit);
   return res.send(topArtists);
 });
 
-const search = async (accessToken): Promise<any> => {
+const search = async (accessToken, query, type, limit = 10): Promise<any> => {
   let retVal = {};
   await axios
-    .get(`https://api.spotify.com/v1/search?q=rock&type=playlist`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    })
+    .get(
+      `https://api.spotify.com/v1/search?q=${query}&type=${type}&limit=${limit}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    )
     .then((response) => {
       retVal = response.data;
     })
