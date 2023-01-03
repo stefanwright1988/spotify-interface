@@ -54,14 +54,6 @@ const spotifySlice = createSlice({
         (state, action) => {
           state.spotify_access_code = action.payload.access_token;
         }
-      )
-      .addMatcher(
-        spotifyApi.endpoints.getTopArtists.matchFulfilled,
-        (state, action) => {
-          spotifyApi.endpoints.recentGenrePlaylists.initiate(
-            action.payload.genres
-          );
-        }
       );
   },
 });

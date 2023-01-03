@@ -48,7 +48,7 @@ export const spotifyApi = api.injectEndpoints({
         let argGenres = [...arg.genres];
         var seedGenres = {};
 
-        for (var i = 0; i < 3; i++) {
+        for (var i = 0; i < 2; i++) {
           var idx = Math.floor(Math.random() * argGenres.length);
           const query = await baseQuery(
             `/search?query=${argGenres[idx]}&type=playlist&limit=10`
@@ -61,15 +61,19 @@ export const spotifyApi = api.injectEndpoints({
         return { data: seedGenres };
       },
     }),
-    getTopArtists: build.query<any, void | null>({
+    getTopArtistsAndGenres: build.query<any, void | null>({
       query: () => ({
-        url: "getTopArtists",
+        url: "getTopArtistsAndGenres",
       }),
       transformResponse: (response) => {
         const artists = new Set();
         const genres = new Set();
         response.items.map((artist) => {
-          artists.add({ artistName: artist.name, images: artist.images });
+          artists.add({
+            artistName: artist.name,
+            artistId: artist.id,
+            images: artist.images,
+          });
           if (artist.genres.length > 0) {
             artist.genres.forEach((genre) => genres.add(genre));
           }
@@ -78,6 +82,28 @@ export const spotifyApi = api.injectEndpoints({
           artists: Array.from(artists),
           genres: Array.from(genres),
         };
+      },
+    }),
+    getRelatedArtists: build.query<any, void | null>({
+      queryFn: async (arg, queryApi, extraOptions, baseQuery) => {
+        let argArtists = [...arg.artists];
+        let retVal = { queryArtist: "", artists: [] };
+
+        while (retVal["artists"].length === 0) {
+          var idx = Math.floor(Math.random() * argArtists.length);
+          const queryArtist = argArtists[idx];
+
+          retVal["queryArtist"] = queryArtist.artistName;
+          console.log(retVal);
+          const query = await baseQuery(
+            `/relatedArtists?artistId=${queryArtist.artistId}`
+          );
+
+          retVal["artists"].push(...query.data.artists);
+
+          argArtists.splice(idx, 1);
+        }
+        return { data: retVal };
       },
     }),
     test: build.query({
@@ -97,7 +123,8 @@ export const {
   useGetUserQuery,
   useFeaturedPlaylistsQuery,
   useRecentGenrePlaylistsQuery,
-  useGetTopArtistsQuery,
+  useGetTopArtistsAndGenresQuery,
+  useGetRelatedArtistsQuery,
 } = spotifyApi;
 
 export const {
