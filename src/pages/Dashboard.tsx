@@ -5,7 +5,8 @@ import Spinner from "../components/Spinner";
 import {
   spotifyApi,
   useFeaturedPlaylistsQuery,
-  useGetTopArtistsQuery,
+  useGetRelatedArtistsQuery,
+  useGetTopArtistsAndGenresQuery,
   useRecentGenrePlaylistsQuery,
 } from "../redux/api/spotify";
 import { RootState, useTypedSelector } from "../redux/store";
@@ -29,7 +30,7 @@ const Dashboard = () => {
     isError: topArtistsError,
     isSuccess: topArtistsSuccess,
     isUninitialized: topArtistsUninitialized,
-  } = useGetTopArtistsQuery(undefined, { skip: !accessToken });
+  } = useGetTopArtistsAndGenresQuery(undefined, { skip: !accessToken });
   const {
     data: recentGenrePlaylistsData,
     isLoading: recentGenrePlaylistsLoading,
@@ -39,10 +40,29 @@ const Dashboard = () => {
   } = useRecentGenrePlaylistsQuery(topArtistsData, {
     skip: !accessToken || !topArtistsData,
   });
-  if (featuredLoading || recentGenrePlaylistsLoading || topArtistsLoading) {
+  const {
+    data: relatedArtistsData,
+    isLoading: relatedArtistsLoading,
+    isError: relatedArtistsError,
+    isSuccess: relatedArtistsSuccess,
+    isUninitialized: relatedArtistsUninitialized,
+  } = useGetRelatedArtistsQuery(topArtistsData, {
+    skip: !accessToken || !topArtistsData,
+  });
+  if (
+    featuredLoading ||
+    recentGenrePlaylistsLoading ||
+    topArtistsLoading ||
+    relatedArtistsLoading
+  ) {
     return <Spinner />;
   }
-  if (featuredError || recentGenrePlaylistsError) {
+  if (
+    featuredError ||
+    recentGenrePlaylistsError ||
+    topArtistsError ||
+    relatedArtistsError
+  ) {
     return <h1>An error occured</h1>;
   }
 
