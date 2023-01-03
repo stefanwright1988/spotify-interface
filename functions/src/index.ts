@@ -358,18 +358,18 @@ const getRecommendedPlaylists = async (accessToken): Promise<any> => {
   return retVal;
 };
 
-app.get("/getTopArtists", async (req: any, res: any) => {
+app.get("/getTopArtistsAndGenres", async (req: any, res: any) => {
   const accessToken = req.headers["rtkaccesstoken"];
   if (!accessToken) {
     return res
       .status(401)
       .send({ message: "No Access Header Value", status: 401 });
   }
-  const topArtists = await getTopArtists(accessToken);
+  const topArtists = await getTopArtistsAndGenres(accessToken);
   return res.send(topArtists);
 });
 
-const getTopArtists = async (accessToken): Promise<any> => {
+const getTopArtistsAndGenres = async (accessToken): Promise<any> => {
   let retVal = {};
   await axios
     .get(`https://api.spotify.com/v1/me/top/artists?limit=10`, {
@@ -427,6 +427,53 @@ const search = async (accessToken, query, type, limit = 10): Promise<any> => {
         },
       }
     )
+    .then((response) => {
+      retVal = response.data;
+    })
+    .catch((error) => {
+      if (error.response) {
+        // Request made and server responded
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        retVal = {
+          ...error.response.data,
+          status: error.response.status,
+        };
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.log(error.request);
+        retVal = { error: error.request };
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+        retVal = { error: error.message };
+      }
+    });
+  return retVal;
+};
+
+app.get("/relatedArtists", async (req: any, res: any) => {
+  const accessToken = req.headers["rtkaccesstoken"];
+  const { artistId } = req.query;
+
+  if (!accessToken) {
+    return res
+      .status(401)
+      .send({ message: "No Access Header Value", status: 401 });
+  }
+  const topArtists = await relatedArtists(accessToken, artistId);
+  return res.send(topArtists);
+});
+
+const relatedArtists = async (accessToken, artistId): Promise<any> => {
+  let retVal = {};
+  await axios
+    .get(`https://api.spotify.com/v1/artists/${artistId}/related-artists`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
     .then((response) => {
       retVal = response.data;
     })
