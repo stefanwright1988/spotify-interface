@@ -94,7 +94,6 @@ export const spotifyApi = api.injectEndpoints({
           const queryArtist = argArtists[idx];
 
           retVal["queryArtist"] = queryArtist.artistName;
-          console.log(retVal);
           const query = await baseQuery(
             `/relatedArtists?artistId=${queryArtist.artistId}`
           );
