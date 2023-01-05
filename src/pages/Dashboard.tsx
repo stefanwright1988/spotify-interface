@@ -196,7 +196,7 @@ const Dashboard = () => {
           );
         })}
         <h1 className="text-3xl">
-          Because you liked {relatedArtistsData.queryArtist}
+          Because you listened to {relatedArtistsData.queryArtist}
         </h1>
         <div className="grid grid-cols-[repeat(auto-fit,_minmax(160px,_1fr))] gap-5 overflow-y-hidden py-6 grid-rows-1">
           {relatedArtistsData.artists.map((artist, index) => {
