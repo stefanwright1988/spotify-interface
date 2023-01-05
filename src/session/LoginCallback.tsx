@@ -1,5 +1,10 @@
 import { FaSpinner } from "react-icons/fa";
-import { useSearchParams } from "react-router-dom";
+import {
+  Navigate,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
 import spotifySlice from "../redux/slices/spotifyAuth";
@@ -13,33 +18,10 @@ const LoginCallback = () => {
   const { setSpotifyAccessCode, setSpotifyRefreshCode, setSpotifyExpiresAt } =
     spotifySlice.actions;
 
-  /* useEffect(() => {
-    const controller: AbortController = new AbortController();
-    const signal: AbortSignal = controller.signal;
-    const performLogin = async () => {
-      await axios
-        .get(
-          `http://localhost:5001/spotify-react-ts-vite/us-central1/app/callback?code=${accessCode}`,
-          { signal: signal }
-        )
-        .then((res) => {
-          dispatch(setSpotifyAccessCode(res.data.access_token));
-          dispatch(setSpotifyRefreshCode(res.data.refresh_token));
-          dispatch(
-            setSpotifyExpiresAt(Date.now() + res.data.expires_in * 1000 - 10000)
-          );
-          window.history.pushState({}, "", "/");
-        })
-        .catch((err) => {
-          if (controller.signal.aborted) return;
-          console.log(err);
-        });
-    };
-    performLogin();
-    return () => {
-      controller.abort();
-    };
-  }, [accessCode]); */
+  let navigate = useNavigate();
+  let location = useLocation();
+
+  let from = location.state?.from?.pathname || "/";
 
   if (accessCode != null) {
     const { data, isLoading, isFetching, isSuccess } =
@@ -54,11 +36,8 @@ const LoginCallback = () => {
       );
     }
   }
-  return (
-    <div>
-      <p>some return</p>
-    </div>
-  );
+
+  return <Navigate to={from} replace />;
 };
 
 export default LoginCallback;

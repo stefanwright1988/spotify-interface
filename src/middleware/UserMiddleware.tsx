@@ -30,6 +30,10 @@ const UserMiddleware: FC<Props> = ({ children }) => {
     skip: !accessToken,
   });
 
+  spotifyApi.endpoints.featuredPlaylists.useQuery(undefined, {
+    skip: !accessToken,
+  });
+
   if (!accessToken && !refreshToken) {
     return children as React.ReactElement;
   }

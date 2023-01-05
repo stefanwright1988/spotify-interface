@@ -26,7 +26,6 @@ app.get("/hello", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  console.log(req.headers);
   const state = generateRandomString(16);
   res.cookie(stateKey, state);
 
@@ -98,6 +97,7 @@ app.post("/callback", (req: any, res) => {
 
 app.get("/refresh_token", (req: any, res: any) => {
   const refreshToken = req.headers["rtkrefreshtoken"];
+  let retVal = {};
 
   if (!refreshToken) {
     return res.status(200).send("no token");
@@ -124,15 +124,32 @@ app.get("/refresh_token", (req: any, res: any) => {
         return res.send(response.data);
       })
       .catch((error) => {
-        return res.send(error);
-        console.log(error);
+        if (error.response) {
+          // Request made and server responded
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+          retVal = {
+            ...error.response.data,
+            status: error.response.status,
+          };
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.log(error.request);
+          retVal = { error: error.request };
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log("Error", error.message);
+          retVal = { error: error.message };
+        }
       });
+
+    return retVal;
   }
 });
 
 app.get("/allPlaylists", async (req: any, res) => {
   const accessToken = req.headers["rtkaccesstoken"];
-  console.log(req.headers);
   try {
     const playlists = await getAllPlaylists(accessToken);
     res.send(playlists);
@@ -271,7 +288,194 @@ const getUserDetails = async (accessToken): Promise<any> => {
       },
     })
     .then((response) => {
-      retVal = { ...retVal, ...response.data };
+      retVal = response.data;
+    })
+    .catch((error) => {
+      if (error.response) {
+        // Request made and server responded
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        retVal = {
+          ...error.response.data,
+          status: error.response.status,
+        };
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.log(error.request);
+        retVal = { error: error.request };
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+        retVal = { error: error.message };
+      }
+    });
+  return retVal;
+};
+
+app.get("/featuredPlaylists", async (req: any, res: any) => {
+  const accessToken = req.headers["rtkaccesstoken"];
+  if (!accessToken) {
+    return res
+      .status(401)
+      .send({ message: "No Access Header Value", status: 401 });
+  }
+  const featuredPlaylists = await getRecommendedPlaylists(accessToken);
+  return res.send(featuredPlaylists);
+});
+
+const getRecommendedPlaylists = async (accessToken): Promise<any> => {
+  let retVal = {};
+  await axios
+    .get(`https://api.spotify.com/v1/browse/featured-playlists`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+    .then((response) => {
+      retVal = response.data;
+    })
+    .catch((error) => {
+      if (error.response) {
+        // Request made and server responded
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        retVal = {
+          ...error.response.data,
+          status: error.response.status,
+        };
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.log(error.request);
+        retVal = { error: error.request };
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+        retVal = { error: error.message };
+      }
+    });
+  return retVal;
+};
+
+app.get("/getTopArtistsAndGenres", async (req: any, res: any) => {
+  const accessToken = req.headers["rtkaccesstoken"];
+  if (!accessToken) {
+    return res
+      .status(401)
+      .send({ message: "No Access Header Value", status: 401 });
+  }
+  const topArtists = await getTopArtistsAndGenres(accessToken);
+  return res.send(topArtists);
+});
+
+const getTopArtistsAndGenres = async (accessToken): Promise<any> => {
+  let retVal = {};
+  await axios
+    .get(`https://api.spotify.com/v1/me/top/artists?limit=10`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+    .then((response) => {
+      retVal = response.data;
+    })
+    .catch((error) => {
+      if (error.response) {
+        // Request made and server responded
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        retVal = {
+          ...error.response.data,
+          status: error.response.status,
+        };
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.log(error.request);
+        retVal = { error: error.request };
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+        retVal = { error: error.message };
+      }
+    });
+  return retVal;
+};
+
+app.get("/search", async (req: any, res: any) => {
+  const accessToken = req.headers["rtkaccesstoken"];
+  const { query, type, limit } = req.query;
+
+  if (!accessToken) {
+    return res
+      .status(401)
+      .send({ message: "No Access Header Value", status: 401 });
+  }
+  const topArtists = await search(accessToken, query, type, limit);
+  return res.send(topArtists);
+});
+
+const search = async (accessToken, query, type, limit = 10): Promise<any> => {
+  let retVal = {};
+  await axios
+    .get(
+      `https://api.spotify.com/v1/search?q=${query}&type=${type}&limit=${limit}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    )
+    .then((response) => {
+      retVal = response.data;
+    })
+    .catch((error) => {
+      if (error.response) {
+        // Request made and server responded
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        retVal = {
+          ...error.response.data,
+          status: error.response.status,
+        };
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.log(error.request);
+        retVal = { error: error.request };
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log("Error", error.message);
+        retVal = { error: error.message };
+      }
+    });
+  return retVal;
+};
+
+app.get("/relatedArtists", async (req: any, res: any) => {
+  const accessToken = req.headers["rtkaccesstoken"];
+  const { artistId } = req.query;
+
+  if (!accessToken) {
+    return res
+      .status(401)
+      .send({ message: "No Access Header Value", status: 401 });
+  }
+  const topArtists = await relatedArtists(accessToken, artistId);
+  return res.send(topArtists);
+});
+
+const relatedArtists = async (accessToken, artistId): Promise<any> => {
+  let retVal = {};
+  await axios
+    .get(`https://api.spotify.com/v1/artists/${artistId}/related-artists`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+    .then((response) => {
+      retVal = response.data;
     })
     .catch((error) => {
       if (error.response) {
