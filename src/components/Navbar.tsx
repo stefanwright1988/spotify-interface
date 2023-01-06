@@ -7,11 +7,20 @@ import {
   CgChevronLeftO,
   CgChevronRightO,
 } from "react-icons/cg";
+import { useGetUserQuery } from "../redux/api/spotify";
 
 const Navbar = () => {
   const AUTH_URL = import.meta.env.VITE_AUTH_URL;
   const globalState = useAppSelector((state: any) => state);
   const navigate = useNavigate();
+
+  const {
+    data: userData,
+    isLoading: userDataLoading,
+    isError: userDataError,
+    isSuccess: userDataSuccess,
+    isUninitialized: userDataUninitialized,
+  } = useGetUserQuery();
 
   const [userWentBack, setUserWentBack] = useState(false);
   const [backCount, setBackCount] = useState(0);
@@ -36,7 +45,7 @@ const Navbar = () => {
   }, [backCount]);
 
   return (
-    <header className="flex justify-center items-center w-full p-4">
+    <header className="flex w-full p-4">
       <div id="pageNavigation" className="flex h-full items-center w-1/2">
         <div className="rounded-xl shadow-lg shadow-black p-2 bg-slate-900">
           <span>
@@ -55,15 +64,21 @@ const Navbar = () => {
           </span>
         </div>
       </div>
-      <a
-        id="user"
-        className="flex items-center justify-end w-1/2 mr-8"
-        href={AUTH_URL}
-      >
-        <div className="bg-slate-900 p-2 rounded-xl shadow-lg shadow-black leading-8">
-          <span>Login with Spotify</span>
+      <div id="user" className="flex h-full w-1/2 justify-end pr-4">
+        <div className="rounded-xl shadow-lg shadow-black p-2 bg-slate-900">
+          {userDataLoading ? (
+            "Loading"
+          ) : (
+            <>
+              <img
+                src={userData.images[0].url}
+                style={{ height: "28px", width: "28px" }}
+              />{" "}
+              {userData.display_name}
+            </>
+          )}
         </div>
-      </a>
+      </div>
     </header>
   );
 };
