@@ -65,18 +65,38 @@ const Navbar = () => {
         </div>
       </div>
       <div id="user" className="flex h-full w-1/2 justify-end pr-4">
-        <div className="rounded-xl shadow-lg shadow-black p-2 bg-slate-900">
-          {userDataLoading ? (
-            "Loading"
-          ) : (
-            <>
-              <img
-                src={userData.images[0].url}
-                style={{ height: "28px", width: "28px" }}
-              />{" "}
-              {userData.display_name}
-            </>
-          )}
+        <div className="rounded-xl shadow-lg shadow-black p-2 flex bg-white fixed justify-between w-80 items-start z-10 h-64">
+          <div className="userArea flex items-center relative content-end">
+            {userDataLoading ? (
+              "Loading"
+            ) : (
+              <>
+                <img
+                  src={userData.images[0].url}
+                  style={{ height: "28px", width: "28px" }}
+                />
+                <span className="px-2">{userData.display_name}</span>
+              </>
+            )}
+          </div>
+          <div className="userMenuToggle relative w-16 flex justify-center items-center h-7"></div>
+          <ul className="userMenu absolute mt-16 p-5 border-t-1 border-gray-900">
+            <li className="list-none">
+              <a href="#">Profile</a>
+            </li>
+            <li className="list-none">
+              <a href="#">Messages</a>
+            </li>
+            <li className="list-none">
+              <a href="#">Notification</a>
+            </li>
+            <li className="list-none">
+              <a href="#">Settings</a>
+            </li>
+            <li className="list-none">
+              <a href="#">Logout</a>
+            </li>
+          </ul>
         </div>
       </div>
     </header>
