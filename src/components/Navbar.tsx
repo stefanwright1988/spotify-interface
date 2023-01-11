@@ -36,6 +36,8 @@ const Navbar = () => {
     navigate(1);
   };
 
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+
   useEffect(() => {
     if (backCount > 0) {
       setUserWentBack(true);
@@ -65,36 +67,56 @@ const Navbar = () => {
         </div>
       </div>
       <div id="user" className="flex h-full w-1/2 justify-end pr-4">
-        <div className="rounded-xl shadow-lg shadow-black p-2 flex bg-white fixed justify-between w-80 items-start z-10 h-64">
-          <div className="userArea flex items-center relative content-end">
-            {userDataLoading ? (
-              "Loading"
-            ) : (
-              <>
-                <img
-                  src={userData.images[0].url}
-                  style={{ height: "28px", width: "28px" }}
-                />
-                <span className="px-2">{userData.display_name}</span>
-              </>
-            )}
+        <div
+          className={`navigation relative ${
+            userMenuOpen ? `w-fit` : `w-28`
+          } h-12 flex justify-between bg-slate-500 overflow-hidden z-10 ${
+            userMenuOpen ? `active` : ``
+          } transition`}
+        >
+          <div
+            className={`user-box relative ${
+              userMenuOpen ? `w-fit` : `w-12`
+            } h-12 flex items-center overflow-hidden`}
+          >
+            <div className="image-box relative min-w-[3rem] h-12 overflow-hidden">
+              <img
+                src="https://i.pravatar.cc/150?img=49"
+                alt="avatar"
+                className="absolute top-0 left-0 w-full h-full object-cover"
+              />
+            </div>
+            <p className="username whitespace-nowrap">Jenifer Lopez</p>
           </div>
-          <div className="userMenuToggle relative w-16 flex justify-center items-center h-7"></div>
-          <ul className="userMenu absolute mt-16 p-5 border-t-1 border-gray-900">
+          <div
+            onClick={() => setUserMenuOpen((prevState) => !prevState)}
+            className="menu-toggle relative w-12 h-12 flex justify-center items-center cursor-pointer"
+          ></div>
+          <ul className="menu absolute w-full h-[calc(100%_-_48px) mt-12 p-5">
             <li className="list-none">
-              <a href="#">Profile</a>
+              <a href="#" className="flex items-center gap-3 my-5">
+                Profile
+              </a>
             </li>
             <li className="list-none">
-              <a href="#">Messages</a>
+              <a href="#" className="flex items-center gap-3 my-5">
+                Messages
+              </a>
             </li>
             <li className="list-none">
-              <a href="#">Notification</a>
+              <a href="#" className="flex items-center gap-3 my-5">
+                Notification
+              </a>
             </li>
             <li className="list-none">
-              <a href="#">Settings</a>
+              <a href="#" className="flex items-center gap-3 my-5">
+                Settings
+              </a>
             </li>
             <li className="list-none">
-              <a href="#">Logout</a>
+              <a href="#" className="flex items-center gap-3 my-5">
+                Logout
+              </a>
             </li>
           </ul>
         </div>
