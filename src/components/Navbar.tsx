@@ -47,8 +47,11 @@ const Navbar = () => {
   }, [backCount]);
 
   return (
-    <header className="flex w-full p-4">
-      <div id="pageNavigation" className="flex h-full items-center w-1/2">
+    <header className="flex px-12 py-4 z-10">
+      <div
+        id="pageNavigation"
+        className="flex h-full items-center justify-start w-1/2"
+      >
         <div className="rounded-xl shadow-lg shadow-black p-2 bg-slate-900">
           <span>
             <CgChevronLeftO
@@ -66,59 +69,24 @@ const Navbar = () => {
           </span>
         </div>
       </div>
-      <div id="user" className="flex h-full w-1/2 justify-end pr-4">
-        <div
-          className={`navigation relative ${
-            userMenuOpen ? `w-fit` : `w-28`
-          } h-12 flex justify-between bg-slate-500 overflow-hidden z-10 ${
-            userMenuOpen ? `active` : ``
-          } transition`}
-        >
-          <div
-            className={`user-box relative ${
-              userMenuOpen ? `w-fit` : `w-12`
-            } h-12 flex items-center overflow-hidden`}
-          >
-            <div className="image-box relative min-w-[3rem] h-12 overflow-hidden">
-              <img
-                src="https://i.pravatar.cc/150?img=49"
-                alt="avatar"
-                className="absolute top-0 left-0 w-full h-full object-cover"
-              />
+      <div className=" w-1/2 flex justify-end">
+        <div className={`dropdown ${userMenuOpen ? "open" : ""}`} id="dropdown">
+          <button onClick={() => setUserMenuOpen((prevState) => !prevState)}>
+            <img
+              src={userData.images[0].url || ""}
+              alt="avatar"
+              className="w-8 h-8 object-cover"
+            />
+            {userData.display_name}
+            <span className="chevron material-symbols-outlined"> &gt; </span>
+          </button>
+          <div id="menu" className="menu">
+            <div id="menu-inner" className="menu-inner">
+              <div className="main-menu">
+                <button>Logout</button>
+              </div>
             </div>
-            <p className="username whitespace-nowrap">Jenifer Lopez</p>
           </div>
-          <div
-            onClick={() => setUserMenuOpen((prevState) => !prevState)}
-            className="menu-toggle relative w-12 h-12 flex justify-center items-center cursor-pointer"
-          ></div>
-          <ul className="menu absolute w-full h-[calc(100%_-_48px) mt-12 p-5">
-            <li className="list-none">
-              <a href="#" className="flex items-center gap-3 my-5">
-                Profile
-              </a>
-            </li>
-            <li className="list-none">
-              <a href="#" className="flex items-center gap-3 my-5">
-                Messages
-              </a>
-            </li>
-            <li className="list-none">
-              <a href="#" className="flex items-center gap-3 my-5">
-                Notification
-              </a>
-            </li>
-            <li className="list-none">
-              <a href="#" className="flex items-center gap-3 my-5">
-                Settings
-              </a>
-            </li>
-            <li className="list-none">
-              <a href="#" className="flex items-center gap-3 my-5">
-                Logout
-              </a>
-            </li>
-          </ul>
         </div>
       </div>
     </header>
