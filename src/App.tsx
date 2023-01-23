@@ -16,7 +16,6 @@ import "./app.css";
 import LoginCallback from "./session/LoginCallback";
 import { useAppSelector } from "./hooks/reduxHooks";
 import ProtectedRoutes from "./middleware/ProtectedRoutes";
-import ProtectedRoutes from "./middleware/ProtectedRoutes";
 
 function App() {
   //Redux
