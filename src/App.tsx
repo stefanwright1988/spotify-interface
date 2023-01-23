@@ -16,12 +16,13 @@ import "./app.css";
 import LoginCallback from "./session/LoginCallback";
 import { useAppSelector } from "./hooks/reduxHooks";
 import ProtectedRoutes from "./middleware/ProtectedRoutes";
+import ProtectedRoutes from "./middleware/ProtectedRoutes";
 
 function App() {
   //Redux
   const { spotify_access_code, spotify_refresh_code, spotify_token_expiresAt } =
     useAppSelector((state: any) => state.spotify);
-    
+
   return (
     <BrowserRouter>
       <Routes>
