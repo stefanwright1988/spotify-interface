@@ -20,7 +20,7 @@ const Navbar = () => {
     isError: userDataError,
     isSuccess: userDataSuccess,
     isUninitialized: userDataUninitialized,
-  } = useGetUserQuery();
+  } = useGetUserQuery(null);
 
   const [userWentBack, setUserWentBack] = useState(false);
   const [backCount, setBackCount] = useState(0);

@@ -38,7 +38,7 @@ const UserMiddleware: FC<Props> = ({ children }) => {
     return children as React.ReactElement;
   }
 
-  if (!user && !accessToken) {
+  if (!user || !accessToken) {
     return (
       <>
         <h1>LOADING</h1>
