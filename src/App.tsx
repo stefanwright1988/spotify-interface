@@ -21,6 +21,7 @@ function App() {
   //Redux
   const { spotify_access_code, spotify_refresh_code, spotify_token_expiresAt } =
     useAppSelector((state: any) => state.spotify);
+    
   return (
     <BrowserRouter>
       <Routes>
