@@ -7,11 +7,20 @@ import {
   CgChevronLeftO,
   CgChevronRightO,
 } from "react-icons/cg";
+import { useGetUserQuery } from "../redux/api/spotify";
 
 const Navbar = () => {
   const AUTH_URL = import.meta.env.VITE_AUTH_URL;
   const globalState = useAppSelector((state: any) => state);
   const navigate = useNavigate();
+
+  const {
+    data: userData,
+    isLoading: userDataLoading,
+    isError: userDataError,
+    isSuccess: userDataSuccess,
+    isUninitialized: userDataUninitialized,
+  } = useGetUserQuery(null);
 
   const [userWentBack, setUserWentBack] = useState(false);
   const [backCount, setBackCount] = useState(0);
@@ -27,6 +36,8 @@ const Navbar = () => {
     navigate(1);
   };
 
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+
   useEffect(() => {
     if (backCount > 0) {
       setUserWentBack(true);
@@ -36,8 +47,11 @@ const Navbar = () => {
   }, [backCount]);
 
   return (
-    <header className="flex justify-center items-center w-full p-4">
-      <div id="pageNavigation" className="flex h-full items-center w-1/2">
+    <header className="flex px-12 py-4 z-10">
+      <div
+        id="pageNavigation"
+        className="flex h-full items-center justify-start w-1/2"
+      >
         <div className="rounded-xl shadow-lg shadow-black p-2 bg-slate-900">
           <span>
             <CgChevronLeftO
@@ -55,15 +69,26 @@ const Navbar = () => {
           </span>
         </div>
       </div>
-      <a
-        id="user"
-        className="flex items-center justify-end w-1/2 mr-8"
-        href={AUTH_URL}
-      >
-        <div className="bg-slate-900 p-2 rounded-xl shadow-lg shadow-black leading-8">
-          <span>Login with Spotify</span>
+      <div className=" w-1/2 flex justify-end">
+        <div className={`dropdown ${userMenuOpen ? "open" : ""}`} id="dropdown">
+          <button onClick={() => setUserMenuOpen((prevState) => !prevState)}>
+            <img
+              src={userData.images[0].url || ""}
+              alt="avatar"
+              className="w-8 h-8 object-cover"
+            />
+            {userData.display_name}
+            <span className="chevron material-symbols-outlined"> &gt; </span>
+          </button>
+          <div id="menu" className="menu">
+            <div id="menu-inner" className="menu-inner">
+              <div className="main-menu">
+                <button>Logout</button>
+              </div>
+            </div>
+          </div>
         </div>
-      </a>
+      </div>
     </header>
   );
 };

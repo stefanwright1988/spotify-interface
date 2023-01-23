@@ -38,8 +38,13 @@ const UserMiddleware: FC<Props> = ({ children }) => {
     return children as React.ReactElement;
   }
 
-  if (!user && !accessToken) {
-    return <Spinner />;
+  if (!user || !accessToken) {
+    return (
+      <>
+        <h1>LOADING</h1>
+        <Spinner />
+      </>
+    );
   }
 
   return children as React.ReactElement;
