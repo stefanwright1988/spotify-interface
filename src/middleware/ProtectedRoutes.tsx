@@ -23,7 +23,7 @@ const ProtectedRoutes = () => {
 
   return (
     <UserMiddleware>
-      <div className="max-w-full w-full h-screen overflow:auto xl:overflow-hidden bg-slate-800">
+      <div className="max-w-full w-full h-screen overflow:auto xl:overflow-hidden bg-[#496AFE]">
         <div className="flex flex-wrap flex-row w-full max-h-[90vh] min-h-[90vh] aside-container">
           <aside
             id="content__left"

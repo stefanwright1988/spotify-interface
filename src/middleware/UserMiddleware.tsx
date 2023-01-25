@@ -2,7 +2,6 @@ import React, { FC } from "react";
 import { Route, Routes } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import { useAuthUser } from "../hooks/useAuthUser";
-import { Dashboard, Default } from "../pages";
 import { spotifyApi, useAllPlaylistsQuery } from "../redux/api/spotify";
 import { RootState, useTypedSelector } from "../redux/store";
 

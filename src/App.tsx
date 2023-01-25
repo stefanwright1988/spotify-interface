@@ -9,7 +9,6 @@ import {
   Playlists,
   Search,
   Me,
-  Default,
   Login,
 } from "./pages";
 import "./app.css";

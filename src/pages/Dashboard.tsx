@@ -80,21 +80,18 @@ const Dashboard = () => {
               return (
                 <div
                   key={index}
-                  className="flex text-white text-2xl flex-col justify-end p-3 rounded-xl overflow-hidden bg-gray-900 hover:bg-gray-700 group shadow-md shadow-black"
+                  className="flex text-black text-2xl flex-col justify-end p-3 rounded-md overflow-hidden bg-[#00EEE4] hover:bg-gray-700 group border-black border-2"
+                  style={{ boxShadow: "5px 5px black" }}
                 >
-                  <div className="relative rounded-3xl overflow-hidden">
-                    {/* TODO Fix when no image
-                     */}
-                    {playlist.images[0] ? (
-                      <img
-                        className="w-full aspect-square "
-                        src={playlist.images[0]?.url}
-                      />
-                    ) : (
-                      <div className="w-full aspect-square flex items-center content-center justify-center bg-gray-500">
-                        <GiMusicalNotes />
-                      </div>
-                    )}
+                  <div
+                    className="relative rounded-md border-black border-2 overflow-hidden "
+                    style={{
+                      boxShadow: "5px 5px black",
+                      background: `url(${playlist.images[0]?.url})`,
+                      backgroundSize: "cover",
+                      height: "156px",
+                    }}
+                  >
                     <div
                       className="absolute top-0 left-0 w-full h-0 flex flex-col justify-center items-center opacity-0 group-hover:h-full group-hover:opacity-40 bg-gray-900
                   "
@@ -142,9 +139,18 @@ const Dashboard = () => {
                       return (
                         <div
                           key={index}
-                          className="flex text-white text-2xl flex-col justify-end p-3 rounded-xl overflow-hidden bg-gray-900 hover:bg-gray-700 group shadow-md shadow-black"
+                          className="flex text-black text-2xl flex-col justify-end p-3 rounded-md overflow-hidden bg-[#00EEE4] hover:bg-gray-700 group border-black border-2"
+                          style={{ boxShadow: "5px 5px black" }}
                         >
-                          <div className="relative rounded-3xl overflow-hidden">
+                          <div
+                            className="relative rounded-md border-black border-2 overflow-hidden "
+                            style={{
+                              boxShadow: "5px 5px black",
+                              background: `url(${recent.images[0]?.url})`,
+                              backgroundSize: "cover",
+                              height: "156px",
+                            }}
+                          >
                             {/* TODO Fix when no image
                              */}
                             {recent.images[0] ? (
@@ -204,9 +210,18 @@ const Dashboard = () => {
               return (
                 <div
                   key={index}
-                  className="flex text-white text-2xl flex-col justify-end p-3 rounded-xl overflow-hidden bg-gray-900 hover:bg-gray-700 group shadow-md shadow-black"
+                  className="flex text-black text-2xl flex-col justify-end p-3 rounded-md overflow-hidden bg-[#00EEE4] hover:bg-gray-700 group border-black border-2"
+                  style={{ boxShadow: "5px 5px black" }}
                 >
-                  <div className="relative rounded-3xl overflow-hidden">
+                  <div
+                    className="relative rounded-md border-black border-2 overflow-hidden "
+                    style={{
+                      boxShadow: "5px 5px black",
+                      background: `url(${artist.images[0]?.url})`,
+                      backgroundSize: "cover",
+                      height: "156px",
+                    }}
+                  >
                     {/* TODO Fix when no image
                      */}
                     {artist.images[0] ? (

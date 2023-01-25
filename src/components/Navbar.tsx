@@ -52,7 +52,10 @@ const Navbar = () => {
         id="pageNavigation"
         className="flex h-full items-center justify-start w-1/2"
       >
-        <div className="rounded-xl shadow-lg shadow-black p-2 bg-slate-900">
+        <div
+          className="rounded-md shadow-lg border-black border-2 p-2 bg-[#00D6FE]"
+          style={{ boxShadow: "5px 5px black" }}
+        >
           <span>
             <CgChevronLeftO
               className="p-1 bg-slate-700 rounded-full h-8 w-8 inline-flex items-center justify-center mr-2"
@@ -70,7 +73,13 @@ const Navbar = () => {
         </div>
       </div>
       <div className=" w-1/2 flex justify-end">
-        <div className={`dropdown ${userMenuOpen ? "open" : ""}`} id="dropdown">
+        <div
+          className={`dropdown ${
+            userMenuOpen ? "open" : ""
+          } border-black border-2 bg-[#FEF08A] text-black`}
+          id="dropdown"
+          style={{ boxShadow: "5px 5px black" }}
+        >
           <button onClick={() => setUserMenuOpen((prevState) => !prevState)}>
             <img
               src={userData.images[0].url || ""}
@@ -80,7 +89,11 @@ const Navbar = () => {
             {userData.display_name}
             <span className="chevron material-symbols-outlined"> &gt; </span>
           </button>
-          <div id="menu" className="menu">
+          <div
+            id="menu"
+            className="menu border-black border-2 bg-[#FEF08A]"
+            style={{ boxShadow: "5px 5px black" }}
+          >
             <div id="menu-inner" className="menu-inner">
               <div className="main-menu">
                 <button>Logout</button>
