@@ -4,9 +4,10 @@ const Playback = () => {
   return (
     <section
       id="current__track"
-      className="w-full bg-gray-900 text-white player-container max-h-[10vh] min-h-[10vh] h-[10vh] order-2 rounded-xl mx-2 shadow-lg shadow-black"
+      className="w-full bg-[#FEF08A] text-white player-container max-h-[calc(10vh_-_10px)] min-h-[calc(10vh_-_10px)] h-[calc(10vh_-_10px)] order-2 rounded-md mx-2 -mt-1"
+      style={{ boxShadow: "5px 5px black" }}
     >
-      <div className="flex h-full items-center justify-between">
+      <div className="flex h-f items-center justify-between">
         <div className="h-full text-gray-700 px-4 py-4 w-1/3 lg:w-1/4 mr-2">
           <div className="flex flex-wrap flex-row items-center h-full">
             <div className="w-10 h-6 xl:w-12 xl:h-8 bg-gray-400 mr-4"></div>

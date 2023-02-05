@@ -47,13 +47,13 @@ const Navbar = () => {
   }, [backCount]);
 
   return (
-    <header className="flex px-12 py-4 z-10">
+    <header className="flex pl-8 pr-[calc(2rem_+_10px)] py-2 z-10">
       <div
         id="pageNavigation"
         className="flex h-full items-center justify-start w-1/2"
       >
         <div
-          className="rounded-md shadow-lg border-black border-2 p-2 bg-[#00D6FE]"
+          className="rounded-md border-black border-2 p-2 bg-[#00D6FE]"
           style={{ boxShadow: "5px 5px black" }}
         >
           <span>
@@ -72,11 +72,11 @@ const Navbar = () => {
           </span>
         </div>
       </div>
-      <div className=" w-1/2 flex justify-end">
+      <div className="w-1/2 flex justify-end">
         <div
-          className={`dropdown ${
+          className={`absolute p-2 dropdown ${
             userMenuOpen ? "open" : ""
-          } border-black border-2 bg-[#FEF08A] text-black`}
+          } border-black border-2 bg-[#FEF08A] text-black rounded-md`}
           id="dropdown"
           style={{ boxShadow: "5px 5px black" }}
         >
@@ -91,10 +91,11 @@ const Navbar = () => {
           </button>
           <div
             id="menu"
-            className="menu border-black border-2 bg-[#FEF08A]"
-            style={{ boxShadow: "5px 5px black" }}
+            className={`menu bg-[#FEF08A] ${
+              !userMenuOpen ? "hidden invisible" : ""
+            }`}
           >
-            <div id="menu-inner" className="menu-inner">
+            <div id="menu-inner" className="menu-inner bg-[#FEF08A]">
               <div className="main-menu">
                 <button>Logout</button>
               </div>
