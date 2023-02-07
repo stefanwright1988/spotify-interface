@@ -96,12 +96,9 @@
   gap: 10px;
   width: 230px;
   height: 100%;
-  color: #f9f9f9;
-  background: transparent;
   border: 0;
   cursor: pointer;
   font-size: 16px;
-  font-family: "Euclid Circular A";
 }
 
 .dropdown button .chevron {

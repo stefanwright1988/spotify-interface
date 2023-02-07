@@ -47,7 +47,7 @@ const Navbar = () => {
   }, [backCount]);
 
   return (
-    <header className="flex pl-8 pr-[calc(2rem_+_10px)] py-2 z-10">
+    <header className="flex p-2 z-10">
       <div
         id="pageNavigation"
         className="flex h-full items-center justify-start w-1/2"

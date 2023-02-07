@@ -4,19 +4,19 @@ const Playback = () => {
   return (
     <section
       id="current__track"
-      className="w-full bg-[#FEF08A] text-white player-container max-h-[calc(10vh_-_10px)] min-h-[calc(10vh_-_10px)] h-[calc(10vh_-_10px)] order-2 rounded-md mx-2 -mt-1"
+      className="flex w-full bg-[#FEF08A] player-container max-h-[calc(13vh_-_10px)] min-h-[calc(13vh_-_10px)] h-[calc(13vh_-_10px)] order-2 rounded-md mx-2 -mt-1"
       style={{ boxShadow: "5px 5px black" }}
     >
-      <div className="flex h-f items-center justify-between">
-        <div className="h-full text-gray-700 px-4 py-4 w-1/3 lg:w-1/4 mr-2">
+      <div className="flex items-center justify-between w-full">
+        <div className="h-full px-4 py-4 w-1/3 lg:w-1/4 mr-2">
           <div className="flex flex-wrap flex-row items-center h-full">
             <div className="w-10 h-6 xl:w-12 xl:h-8 bg-gray-400 mr-4"></div>
-            <h2 className="uppercase text-white self-start text-sm xl:text-base">
+            <h2 className="uppercase self-start text-sm xl:text-base">
               Current Song name
             </h2>
           </div>
         </div>
-        <div className="flex flex-wrap h-full text-center px-4 py-2 w-1/3 lg:w-2/4 mr-2 text-gray-400">
+        <div className="flex flex-wrap h-full text-center px-4 py-2 w-1/3 lg:w-2/4 mr-2">
           <div className="flex flex-wrap items-center justify-center text-center w-full h-auto">
             <svg
               className="fill-current h-3 w-3 mr-6"
@@ -33,7 +33,7 @@ const Playback = () => {
               <path d="M175 100v137.8L403.9 98.1c5.3-3.1 12.1.7 12.1 6.9v302c0 6.2-6.7 10-12.1 6.9L175 274.2V412c0 2.2-1.8 4-4 4h-71c-2.2 0-4-1.8-4-4V100c0-2.2 1.8-4 4-4h71c2.2 0 4 1.8 4 4z"></path>
             </svg>
             <svg
-              className="fill-current h-8 w-8 mr-6 text-gray-200"
+              className="fill-current h-8 w-8 mr-6"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
             >
@@ -65,7 +65,7 @@ const Playback = () => {
           </div>
         </div>
         <div className="h-full text-gray-700 text-center px-6 py-2 w-1/3 lg:w-1/4">
-          <div className="flex justify-end items-center h-full text-gray-200">
+          <div className="flex justify-end items-center h-full">
             <p className="text-xs xl:text-sm mr-3 lg:mr-6">1x</p>
             <svg
               className="fill-current h-5 w-5 lg:h-6 lg:w-6 mr-3 lg:mr-6"
