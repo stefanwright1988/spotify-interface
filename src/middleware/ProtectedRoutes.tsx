@@ -34,7 +34,7 @@ const ProtectedRoutes = () => {
           <main className="flex flex-col h-full w-full lg:w-5/6 text-gray-200 order-1 lg:order-2 max-h-[80vh] lg:max-h-[87vh] min-h-[80vh] lg:min-h-[87vh] pb-4">
             <Navbar />
             <div
-              className="min-h-full overflow-y-auto flex-grow mx-2 border-2 border-black rounded-md"
+              className="min-h-full overflow-y-auto flex-grow mx-2 border-2 border-black rounded-md mt-[80px]"
               style={{ boxShadow: "5px 5px black" }}
             >
               <Outlet />

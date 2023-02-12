@@ -8,11 +8,6 @@ export const links = [
     icon: <FiHome />,
   },
   {
-    name: "Search",
-    link: "/search",
-    icon: <FiSearch />,
-  },
-  {
     name: "playlists",
     link: "/playlists",
     icon: <FiBookOpen />,

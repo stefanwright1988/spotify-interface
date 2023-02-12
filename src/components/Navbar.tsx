@@ -8,6 +8,7 @@ import {
   CgChevronRightO,
 } from "react-icons/cg";
 import { useGetUserQuery } from "../redux/api/spotify";
+import Search from "./Search";
 
 const Navbar = () => {
   const AUTH_URL = import.meta.env.VITE_AUTH_URL;
@@ -47,11 +48,8 @@ const Navbar = () => {
   }, [backCount]);
 
   return (
-    <header className="flex p-2 z-10">
-      <div
-        id="pageNavigation"
-        className="flex h-full items-center justify-start w-1/2"
-      >
+    <header className="flex p-2 z-10 absolute w-[calc(100%_-_16.666667%)]">
+      <div id="pageNavigation" className="flex h-14">
         <div
           className="rounded-md border-black border-2 p-2 bg-[#00D6FE]"
           style={{ boxShadow: "5px 5px black" }}
@@ -72,9 +70,12 @@ const Navbar = () => {
           </span>
         </div>
       </div>
-      <div className="w-1/2 flex justify-end">
+      <div className="flex flex-1 justify-center h-14">
+        <Search />
+      </div>
+      <div className="flex justify-end">
         <div
-          className={`absolute p-2 dropdown ${
+          className={`flex flex-col p-2 dropdown ${
             userMenuOpen ? "open" : ""
           } border-black border-2 bg-[#FEF08A] text-black rounded-md`}
           id="dropdown"
